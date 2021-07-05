@@ -3,7 +3,7 @@ from random import random
 from typing import Iterable
 
 from matchpredictor.predictors.predictor import Predictor
-from matchpredictor.results.result import Team, Fixture, Outcome, Result
+from matchpredictor.matchresults.result import Team, Fixture, Outcome, Result
 
 
 @dataclass

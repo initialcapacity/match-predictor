@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from matchpredictor.predictors.predictor import Predictor
-from matchpredictor.results.result import Outcome, Fixture, Result, Team
+from matchpredictor.matchresults.result import Outcome, Fixture, Result, Team
 
 
 class PointsTable:

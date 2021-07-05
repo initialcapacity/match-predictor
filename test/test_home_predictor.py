@@ -1,11 +1,11 @@
 from unittest import TestCase
 
 from matchpredictor.predictors.home_predictor import HomePredictor
-from test.evaluator import measure_accuracy
+from matchpredictor.evaluation.evaluator import Evaluator
 
 
 class TestHomePredictor(TestCase):
     def test_accuracy(self):
-        accuracy = measure_accuracy(HomePredictor())
+        accuracy = Evaluator(HomePredictor()).measure_accuracy('england-validation.csv')
 
         self.assertGreaterEqual(accuracy, .33)

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from matchpredictor.results.result import Fixture, Outcome
+from matchpredictor.matchresults.result import Fixture, Outcome
 
 
 class Predictor(ABC):
