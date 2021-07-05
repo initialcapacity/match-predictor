@@ -1,14 +1,14 @@
 import csv
-from typing import List, Dict
+from typing import Dict, Callable, List
 
 from matchpredictor.results.result import Result, Fixture, Team, Outcome
 
 
-def load_results(file: str = 'england-training.csv') -> List[Result]:
-    with open(file) as csvfile:
-        rows = csv.DictReader(csvfile)
+def load_results(file: str, result_filter: Callable[[Result], bool] = lambda result: True) -> List[Result]:
+    with open(file) as training_data:
+        rows = csv.DictReader(training_data)
 
-        return list(map(row_to_result, rows))
+        return list(filter(result_filter, map(row_to_result, rows)))
 
 
 def row_to_result(row: Dict[str, str]) -> Result:

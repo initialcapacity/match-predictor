@@ -7,18 +7,18 @@ from test.evaluator import measure_accuracy
 
 class TestPastResultsPredictor(TestCase):
     def test_accuracy(self):
-        predictor = self.__train_predictor()
+        results = load_results(file='england-training.csv')
+        predictor = PastResultsPredictor(calculate_table(results))
         accuracy = measure_accuracy(predictor)
 
         self.assertGreaterEqual(accuracy, .33)
 
     def test_accuracy_last_two_seasons(self):
-        predictor = self.__train_predictor(lambda result: result.fixture.season >= 2017)
+        results = load_results(
+            file='england-training.csv',
+            result_filter=lambda result: result.fixture.season >= 2017
+        )
+        predictor = PastResultsPredictor(calculate_table(results))
         accuracy = measure_accuracy(predictor)
 
         self.assertGreaterEqual(accuracy, .33)
-
-    @staticmethod
-    def __train_predictor(result_filter=lambda result: True) -> PastResultsPredictor:
-        results = list(filter(result_filter, load_results(file='england-training.csv')))
-        return PastResultsPredictor(calculate_table(results))

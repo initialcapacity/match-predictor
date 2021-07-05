@@ -1,7 +1,7 @@
-from typing import List
+from typing import Iterable
 
-from matchpredictor.results.result import Outcome, Fixture, Result, Team
 from matchpredictor.predictors.predictor import Predictor
+from matchpredictor.results.result import Outcome, Fixture, Result, Team
 
 
 class PointsTable:
@@ -38,7 +38,7 @@ class PastResultsPredictor(Predictor):
             return Outcome.DRAW
 
 
-def calculate_table(results: List[Result]) -> PointsTable:
+def calculate_table(results: Iterable[Result]) -> PointsTable:
     table = PointsTable()
 
     for result in results:

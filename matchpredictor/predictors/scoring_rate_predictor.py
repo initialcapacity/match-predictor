@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from random import random
-from typing import List
+from typing import Iterable
 
 from matchpredictor.predictors.predictor import Predictor
 from matchpredictor.results.result import Team, Fixture, Outcome, Result
@@ -65,7 +65,7 @@ class ScoringRatePredictor(Predictor):
             return Outcome.DRAW
 
 
-def calculate_scoring_rates(results: List[Result]) -> ScoringRates:
+def calculate_scoring_rates(results: Iterable[Result]) -> ScoringRates:
     scoring_rates = ScoringRates()
 
     for result in results:
