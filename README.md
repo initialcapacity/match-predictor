@@ -13,3 +13,9 @@ A few different predictors for English football results.
     ```shell
     python -m unittest
     ```
+
+## Run an accuracy report
+
+```shell
+python -m matchpredictor
+```
