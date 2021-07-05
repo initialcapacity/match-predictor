@@ -30,9 +30,9 @@ class Reporter:
         self.__print_reports(reports)
 
     def __print_reports(self, reports: Iterable[PredictionReport]):
-        print("=" * len(self.title))
-        print(self.title)
-        print("=" * len(self.title))
+        print("=" * (len(self.title) + 2))
+        print(f" {self.title} ")
+        print("=" * (len(self.title) + 2))
         print()
 
         print("{:<20} |  {:<8}".format("Predictor", "Accuracy"))

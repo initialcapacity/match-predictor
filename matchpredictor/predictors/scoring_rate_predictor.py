@@ -73,3 +73,7 @@ def calculate_scoring_rates(results: Iterable[Result]) -> ScoringRates:
         scoring_rates.add_match(result.fixture.away_team, result.away_goals)
 
     return scoring_rates
+
+
+def train_scoring_predictor(results: Iterable[Result]) -> ScoringRatePredictor:
+    return ScoringRatePredictor(calculate_scoring_rates(results))

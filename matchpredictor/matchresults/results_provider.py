@@ -20,15 +20,22 @@ def row_to_result(row: Dict[str, str]) -> Result:
         season=int(row['Season']),
     )
 
-    outcome = {
-        "H": Outcome.HOME,
-        "A": Outcome.AWAY,
-        "D": Outcome.DRAW,
-    }[row['result']]
+    home_goals = int(row['hgoal'])
+    away_goals = int(row['vgoal'])
+    outcome = determine_outcome(away_goals, home_goals)
 
     return Result(
         fixture=fixture,
         outcome=outcome,
-        home_goals=int(row['hgoal']),
-        away_goals=int(row['vgoal']),
+        home_goals=home_goals,
+        away_goals=away_goals,
     )
+
+
+def determine_outcome(away_goals, home_goals):
+    if home_goals > away_goals:
+        return Outcome.HOME
+    elif home_goals < away_goals:
+        return Outcome.AWAY
+    else:
+        return Outcome.DRAW

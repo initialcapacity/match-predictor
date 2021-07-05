@@ -51,3 +51,7 @@ def calculate_table(results: Iterable[Result]) -> PointsTable:
             table.record_draw(result.fixture.away_team)
 
     return table
+
+
+def train_results_predictor(results: Iterable[Result]) -> PastResultsPredictor:
+    return PastResultsPredictor(calculate_table(results))
