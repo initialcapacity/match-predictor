@@ -36,11 +36,12 @@ class ScoringRates:
 
 
 class ScoringRatePredictor(Predictor):
-    def __init__(self, scoring_rates: ScoringRates):
+    def __init__(self, scoring_rates: ScoringRates, simulations: int):
         self.scoring_rates = scoring_rates
+        self.simulations = simulations
 
     def predict(self, fixture: Fixture) -> Outcome:
-        results = [self.__simulate(fixture) for _ in range(100)]
+        results = [self.__simulate(fixture) for _ in range(self.simulations)]
 
         return max(set(results), key=results.count)
 
@@ -75,5 +76,5 @@ def calculate_scoring_rates(results: Iterable[Result]) -> ScoringRates:
     return scoring_rates
 
 
-def train_scoring_predictor(results: Iterable[Result]) -> ScoringRatePredictor:
-    return ScoringRatePredictor(calculate_scoring_rates(results))
+def train_scoring_predictor(results: Iterable[Result], simulations: int) -> ScoringRatePredictor:
+    return ScoringRatePredictor(calculate_scoring_rates(results), simulations)
