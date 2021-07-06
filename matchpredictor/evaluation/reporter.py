@@ -30,6 +30,7 @@ class Reporter:
         self.__print_reports(reports)
 
     def __print_reports(self, reports: Iterable[PredictionReport]):
+        print()
         print("=" * (len(self.title) + 2))
         print(f" {self.title} ")
         print("=" * (len(self.title) + 2))
