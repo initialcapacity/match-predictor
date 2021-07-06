@@ -1,6 +1,7 @@
 from matchpredictor.evaluation.reporter import LabeledPredictor, Reporter
 from matchpredictor.matchresults.results_provider import load_results
 from matchpredictor.predictors.home_predictor import HomePredictor
+from matchpredictor.predictors.linear_regression_predictor import train_regression_predictor
 from matchpredictor.predictors.past_results_predictor import train_results_predictor
 from matchpredictor.predictors.scoring_rate_predictor import train_scoring_predictor
 
@@ -12,8 +13,9 @@ england_reporter = Reporter(
     "England 2019",
     england_validation_data,
     [LabeledPredictor("home", HomePredictor()),
-     LabeledPredictor("results", train_results_predictor(england_training_data)),
-     LabeledPredictor("scoring", train_scoring_predictor(england_training_data, 300)), ]
+     LabeledPredictor("points", train_results_predictor(england_training_data)),
+     LabeledPredictor("scoring", train_scoring_predictor(england_training_data, 300)),
+     LabeledPredictor("linear regression", train_regression_predictor(england_training_data)), ]
 )
 
 italy_training_data = load_results('italy-training.csv', result_filter=lambda result: result.fixture.season >= 2017)
@@ -23,8 +25,9 @@ italy_reporter = Reporter(
     "Italy 2019",
     italy_validation_data,
     [LabeledPredictor("home", HomePredictor()),
-     LabeledPredictor("results", train_results_predictor(italy_training_data)),
-     LabeledPredictor("scoring", train_scoring_predictor(italy_training_data, 300)), ]
+     LabeledPredictor("points", train_results_predictor(italy_training_data)),
+     LabeledPredictor("scoring", train_scoring_predictor(italy_training_data, 300)),
+     LabeledPredictor("linear regression", train_regression_predictor(italy_training_data)), ]
 )
 
 print()

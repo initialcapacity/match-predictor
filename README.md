@@ -9,6 +9,11 @@ A few different predictors for English football results.
     source env/bin/activate
     ```
 
+1.  Install dependencies.
+    ```shell
+    pip install -r requirements.txt
+    ```
+
 1.  Run tests
     ```shell
     python -m unittest
