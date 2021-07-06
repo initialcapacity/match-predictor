@@ -15,6 +15,7 @@ def predictor_report_for(country_name: str):
         validation_data,
         [LabeledPredictor("home", HomePredictor()),
          LabeledPredictor("points", train_results_predictor(training_data)),
+         LabeledPredictor("scoring coarse", train_scoring_predictor(training_data, 30)),
          LabeledPredictor("scoring", train_scoring_predictor(training_data, 300)),
          LabeledPredictor("linear regression", train_regression_predictor(training_data)), ]
     ).run_report()

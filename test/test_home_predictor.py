@@ -8,6 +8,6 @@ from matchpredictor.evaluation.evaluator import Evaluator
 class TestHomePredictor(TestCase):
     def test_accuracy(self):
         validation_data = load_results('england-validation.csv')
-        accuracy = Evaluator(HomePredictor()).measure_accuracy(validation_data)
+        accuracy, _ = Evaluator(HomePredictor()).measure_accuracy(validation_data)
 
         self.assertGreaterEqual(accuracy, .33)

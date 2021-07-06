@@ -12,6 +12,6 @@ class TestLinearRegressionPredictor(TestCase):
         validation_data = load_results('england-validation.csv')
         predictor = train_regression_predictor(training_data)
 
-        accuracy = Evaluator(predictor).measure_accuracy(validation_data)
+        accuracy, _ = Evaluator(predictor).measure_accuracy(validation_data)
 
         self.assertGreaterEqual(accuracy, .33)

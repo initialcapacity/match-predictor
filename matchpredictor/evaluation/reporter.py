@@ -16,6 +16,7 @@ class LabeledPredictor(object):
 class PredictionReport(object):
     label: str
     accuracy: float
+    time_elapsed: float
 
 
 class Reporter:
@@ -36,19 +37,20 @@ class Reporter:
         print("=" * (len(self.title) + 2))
         print()
 
-        print("{:<20} |  {:<8}".format("Predictor", "Accuracy"))
-        print("-" * 21 + "+" + "-" * 10)
+        print(" {:<20} | {:<8} | {:<10}".format("Predictor", "Accuracy", "Elapsed"))
+        print("-" * 22 + "+" + "-" * 10 + "+" + "-" * 11)
 
-        format_line = "{:<20} |  {:<8.6f}"
+        format_line = " {:<20} | {:<8.6f} | {:<8.6f}s"
         for r in reports:
-            print(format_line.format(r.label, r.accuracy))
+            print(format_line.format(r.label, r.accuracy, r.time_elapsed))
 
         print()
 
     def __calculate_accuracy(self, predictor: LabeledPredictor) -> PredictionReport:
-        accuracy = Evaluator(predictor.predictor).measure_accuracy(self.validation_data)
+        accuracy, time_elapsed = Evaluator(predictor.predictor).measure_accuracy(self.validation_data)
 
         return PredictionReport(
             label=predictor.label,
-            accuracy=float(accuracy),
+            accuracy=accuracy,
+            time_elapsed=time_elapsed
         )

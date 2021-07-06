@@ -11,6 +11,6 @@ class TestScoringRatePredictor(TestCase):
         validation_data = load_results('england-validation.csv')
         predictor = train_scoring_predictor(training_data, 50)
 
-        accuracy = Evaluator(predictor).measure_accuracy(validation_data)
+        accuracy, _ = Evaluator(predictor).measure_accuracy(validation_data)
 
         self.assertGreaterEqual(accuracy, .33)
