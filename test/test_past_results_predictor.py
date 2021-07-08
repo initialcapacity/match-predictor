@@ -1,14 +1,14 @@
 from unittest import TestCase
 
 from matchpredictor.evaluation.evaluator import Evaluator
-from matchpredictor.matchresults.results_provider import load_results
+from matchpredictor.matchresults.results_provider import training_results, validation_results
 from matchpredictor.predictors.past_results_predictor import train_results_predictor
 
 
 class TestPastResultsPredictor(TestCase):
     def test_accuracy(self):
-        training_data = load_results('england-training.csv')
-        validation_data = load_results('england-validation.csv')
+        training_data = training_results('england.csv', 2019)
+        validation_data = validation_results('england.csv', 2019)
         predictor = train_results_predictor(training_data)
 
         accuracy, _ = Evaluator(predictor).measure_accuracy(validation_data)
@@ -16,8 +16,8 @@ class TestPastResultsPredictor(TestCase):
         self.assertGreaterEqual(accuracy, .33)
 
     def test_accuracy_last_two_seasons(self):
-        training_data = load_results('england-training.csv', result_filter=lambda result: result.fixture.season >= 2017)
-        validation_data = load_results('england-validation.csv')
+        training_data = training_results('england.csv', 2019, result_filter=lambda result: result.fixture.season >= 2017)
+        validation_data = validation_results('england.csv', 2019)
         predictor = train_results_predictor(training_data)
 
         accuracy, _ = Evaluator(predictor).measure_accuracy(validation_data)

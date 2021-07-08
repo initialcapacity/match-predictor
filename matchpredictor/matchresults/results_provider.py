@@ -1,11 +1,27 @@
 import csv
 from os import path
-from typing import Dict, Callable, List
+from typing import Dict, Callable, List, Iterable
 
 from matchpredictor.matchresults.result import Result, Fixture, Team, Outcome
 
 
-def load_results(data_file: str, result_filter: Callable[[Result], bool] = lambda result: True) -> List[Result]:
+def training_results(
+        data_file: str,
+        year: int,
+        result_filter: Callable[[Result], bool] = lambda result: True
+) -> List[Result]:
+    return _load_results(data_file, lambda r: result_filter(r) and r.fixture.season < year)
+
+
+def validation_results(
+        data_file: str,
+        year: int,
+        result_filter: Callable[[Result], bool] = lambda result: True
+) -> List[Result]:
+    return _load_results(data_file, lambda r: result_filter(r) and r.fixture.season == year)
+
+
+def _load_results(data_file: str, result_filter: Callable[[Result], bool]) -> List[Result]:
     with open(path.join('data', data_file)) as training_data:
         rows = csv.DictReader(training_data)
 
