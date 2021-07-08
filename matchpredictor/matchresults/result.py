@@ -12,10 +12,10 @@ class Fixture(object):
     home_team: Team
     away_team: Team
     season: int
-    tier: int
+    tier: int = None
 
 
-class Outcome(Enum):
+class Outcome(str, Enum):
     HOME = "home"
     AWAY = "away"
     DRAW = "draw"
