@@ -2,35 +2,24 @@
 
 A few different predictors for English football results.
 
+## Install dependencies
+
+```shell
+make install
+```
+
 ## Backend
 
 ### Run tests
 
-1.  Create a virtual environment.
-    ```shell
-    cd backend
-    python3 -m venv env
-    ```
-
-1.  Activate the virtual environment.
-    ```shell
-    source env/bin/activate
-    ```
-
-1.  Install dependencies.
-    ```shell
-    pip install -r requirements.txt
-    ```
-
-1.  Run tests
-    ```shell
-    python -m unittest
-    ```
+```shell
+make backend/test
+```
 
 ### Run an accuracy report
 
 ```shell
-python -m matchpredictor
+make backend/run
 ```
 
 ## Frontend
@@ -38,20 +27,17 @@ python -m matchpredictor
 ### Run tests
 
 ```shell
-cd frontend
-npm test
+make frontend/test
 ```
 
 ### Run server
 
 ```shell
-cd frontend
-npm start
+make frontend/run
 ```
 
 ## Integration tests
 
 ```shell
-cd integration-tests
-npm test
+make integration/test
 ```
