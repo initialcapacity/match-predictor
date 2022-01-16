@@ -9,6 +9,6 @@ export default defineConfig({
         eslintPlugin({throwOnWarning: true, throwOnError: true})
     ],
     server: {
-        port: parseInt(process.env.PORT) || 3000
+        port: parseInt(process.env.PORT) || 3001
     }
 });

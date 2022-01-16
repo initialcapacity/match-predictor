@@ -18,6 +18,12 @@ backend/test:
 	source env/bin/activate; \
 	python -m unittest; \
 
+.PHONY: backend/report
+backend/report:
+	cd backend; \
+	source env/bin/activate; \
+	python report.py; \
+
 .PHONY: backend/run
 backend/run:
 	cd backend; \

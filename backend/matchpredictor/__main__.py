@@ -1,5 +1,5 @@
-from matchpredictor.country_predictor_report import predictor_report_for
+import os
 
-predictor_report_for('england', 2019)
-predictor_report_for('italy', 2019)
-predictor_report_for('france', 2018)
+from matchpredictor.app import app
+
+app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5001)))

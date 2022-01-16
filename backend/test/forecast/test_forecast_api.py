@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from app import app
+from matchpredictor.app import app
 
 
 class TestForecastApi(TestCase):

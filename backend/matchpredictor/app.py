@@ -2,6 +2,7 @@ from flask import Flask
 
 from matchpredictor.forecast.forecast import forecast_api
 from matchpredictor.forecast.forecaster import Forecaster
+from matchpredictor.health import health_api
 from matchpredictor.matchresults.result import Result
 from matchpredictor.matchresults.results_provider import training_results
 from matchpredictor.predictors.linear_regression_predictor import train_regression_predictor
@@ -24,6 +25,7 @@ provider = PredictorProvider()
 provider.add("england", train_regression_predictor(england_training_data))
 provider.add("italy", train_regression_predictor(italy_training_data))
 provider.add("france", train_regression_predictor(france_training_data))
-
 forecaster = Forecaster(provider)
+
 app.register_blueprint(forecast_api(season, forecaster), url_prefix="/forecast")
+app.register_blueprint(health_api())
