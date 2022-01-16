@@ -7,5 +7,8 @@ export default defineConfig({
     plugins: [
         react(),
         eslintPlugin({throwOnWarning: true, throwOnError: true})
-    ]
+    ],
+    server: {
+        port: parseInt(process.env.PORT) || 3000
+    }
 });

@@ -3,3 +3,6 @@ env
 __pycache__
 node_modules
 dist
+integration-tests/cypress/screenshots
+integration-tests/cypress/videos
+nohup.out

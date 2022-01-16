@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+function info() {
+  echo -e "\e[34;1m$1\e[0m"
+}
+
+function waitForStatusOk() {
+  TRIES=10
+
+  while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' $1)" != "200" ]]
+  do
+    if [[ "$TRIES" -lt 2 ]]
+    then
+      echo "failed to start $1"
+      exit 1
+    fi
+
+    sleep 1
+    let TRIES-=1
+  done
+}
+
+info "starting frontend"
+kill $(lsof -t -i:3010) > /dev/null 2>&1
+PORT=3010 nohup npm --prefix ../frontend start &
+FRONTEND_PROCESS=$!
+
+waitForStatusOk localhost:3010
+info "frontend started"
+
+info "starting tests"
+npm test
+TEST_RESULT=$?
+
+info "stopping frontend"
+kill $FRONTEND_PROCESS
+
+info "complete!"
+
+echo
+if [ $TEST_RESULT -eq 0 ]
+then
+    echo -e "[ \e[32;1mSUCCESS\e[0m ]"
+else
+    echo -e "[ \e[31;1mFAILURE\e[0m ]"
+fi
+echo
+
+exit $TEST_RESULT

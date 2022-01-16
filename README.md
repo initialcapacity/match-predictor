@@ -2,7 +2,9 @@
 
 A few different predictors for English football results.
 
-## Run tests
+## Backend
+
+### Run tests
 
 1.  Create a virtual environment.
     ```shell
@@ -25,8 +27,31 @@ A few different predictors for English football results.
     python -m unittest
     ```
 
-## Run an accuracy report
+### Run an accuracy report
 
 ```shell
 python -m matchpredictor
+```
+
+## Frontend
+
+### Run tests
+
+```shell
+cd frontend
+npm test
+```
+
+### Run server
+
+```shell
+cd frontend
+npm start
+```
+
+## Integration tests
+
+```shell
+cd integration-tests
+npm test
 ```
