@@ -6,6 +6,7 @@ A few different predictors for English football results.
 
 1.  Create a virtual environment.
     ```shell
+    cd backend
     python3 -m venv env
     ```
 
