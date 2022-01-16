@@ -1,0 +1,82 @@
+html {
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  color: var(--text-color);
+}
+
+a {
+    text-decoration: none;
+    color: var(--accent);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 1rem;
+}
+
+h4 {
+    font-size: .8rem;
+}
+
+p {
+    line-height: 1.4;
+}
+
+h1, h2, h3, h4, p:not(:last-child), ul:not(:last-child) {
+    margin-bottom: 1rem;
+}
+
+strong {
+    font-weight: 700;
+}
+
+em {
+    font-style: italic;
+}
+
+ul li, ol li {
+    list-style: outside;
+    margin-top: .7rem;
+    line-height: 1.3;
+    margin-left: 2rem;
+}
+
+ul li {
+    list-style: disc;
+}
+
+ol li {
+    list-style: decimal;
+}
+
+ul {
+    line-height: 1.4;
+}
+
+.container {
+    width: 100%;
+    max-width: 62.5rem;
+    padding: 0 2rem;
+    margin: 0 auto;
+}

@@ -1,0 +1,23 @@
+header {
+  height: 7rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: var(--accent);
+  color: var(--contrast-text-color);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title h1 {
+  margin-bottom: 0;
+}
+
+img.logo {
+  height: 4rem;
+  width: auto;
+}

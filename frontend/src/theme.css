@@ -1,0 +1,9 @@
+:root {
+    --black: #222222;
+    --green: #348C31;
+    --white: #FFFFFF;
+
+    --text-color: var(--black);
+    --accent: var(--green);
+    --contrast-text-color: var(--white);
+}
