@@ -38,6 +38,14 @@ make frontend/run
 
 ## Integration tests
 
+### Run tests
+
 ```shell
 make integration/test
+```
+
+### Interactive mode
+
+```shell
+make integration/run
 ```

@@ -58,6 +58,12 @@ integration/test:
 	cd integration-tests; \
 	./run; \
 
+.PHONY: integration/run
+integration/run:
+	source backend/env/bin/activate; \
+	cd integration-tests; \
+	KEEP_OPEN=true ./run; \
+
 .PHONY: install
 install: backend/install frontend/install integration/install
 
