@@ -6,7 +6,7 @@ from matchpredictor.predictors.past_results_predictor import train_results_predi
 from matchpredictor.predictors.scoring_rate_predictor import train_scoring_predictor
 
 
-def predictor_report_for(country_name: str, year: int):
+def predictor_report_for(country_name: str, year: int) -> None:
     training_data = training_results(f'{country_name}.csv', year, lambda result: result.fixture.season >= year - 2)
     validation_data = validation_results(f'{country_name}.csv', year)
 

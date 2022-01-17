@@ -12,8 +12,14 @@ backend/install:
 	source env/bin/activate; \
 	pip install -r requirements.txt; \
 
+.PHONY: backend/types
+backend/types:
+	cd backend; \
+	source env/bin/activate; \
+	mypy matchpredictor test; \
+
 .PHONY: backend/test
-backend/test:
+backend/test: backend/types
 	cd backend; \
 	source env/bin/activate; \
 	python -m unittest; \

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -12,7 +13,7 @@ class Fixture(object):
     home_team: Team
     away_team: Team
     season: int
-    tier: int = None
+    tier: Optional[int] = None
 
 
 class Outcome(str, Enum):

@@ -6,7 +6,7 @@ from matchpredictor.predictors.linear_regression_predictor import train_regressi
 
 
 class TestLinearRegressionPredictor(TestCase):
-    def test_accuracy(self):
+    def test_accuracy(self) -> None:
         training_data = training_results('england.csv', 2019, result_filter=lambda result: result.fixture.season >= 2015)
         validation_data = validation_results('england.csv', 2019)
         predictor = train_regression_predictor(training_data)

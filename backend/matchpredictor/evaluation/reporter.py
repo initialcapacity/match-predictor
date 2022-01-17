@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Iterable
+from typing import Iterable, List
 
 from matchpredictor.evaluation.evaluator import Evaluator
 from matchpredictor.matchresults.result import Result
@@ -24,13 +24,13 @@ class Reporter:
         self.title = title
         self.validation_data = validation_data
         self.predictors = predictors
-        self.reports = []
+        self.reports: List[PredictionReport] = []
 
-    def run_report(self):
+    def run_report(self) -> None:
         reports = map(self.__calculate_accuracy, self.predictors)
         self.__print_reports(reports)
 
-    def __print_reports(self, reports: Iterable[PredictionReport]):
+    def __print_reports(self, reports: Iterable[PredictionReport]) -> None:
         print()
         print("=" * (len(self.title) + 2))
         print(f" {self.title} ")

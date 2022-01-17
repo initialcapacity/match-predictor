@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request, Response
 from matchpredictor.forecast.forecaster import Forecaster
 
 
-def forecast_api(season, forecaster: Forecaster) -> Blueprint:
+def forecast_api(season: int, forecaster: Forecaster) -> Blueprint:
     api = Blueprint("forecast_api", __name__)
 
     @api.route(f"/<string:league>/{season}", methods=["GET"])

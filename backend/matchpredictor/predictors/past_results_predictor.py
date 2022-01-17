@@ -1,23 +1,23 @@
-from typing import Iterable
+from typing import Iterable, Dict
 
 from matchpredictor.predictors.predictor import Predictor
 from matchpredictor.matchresults.result import Outcome, Fixture, Result, Team
 
 
 class PointsTable:
-    def __init__(self):
-        self.points_dict = {}
+    def __init__(self) -> None:
+        self.points_dict: Dict[str, int] = {}
 
     def points_for(self, team: Team) -> int:
         return self.points_dict.get(team.name, 0)
 
-    def record_win(self, team: Team):
+    def record_win(self, team: Team) -> None:
         self.__add_points(team, 3)
 
-    def record_draw(self, team: Team):
+    def record_draw(self, team: Team) -> None:
         self.__add_points(team, 1)
 
-    def __add_points(self, team: Team, points: int):
+    def __add_points(self, team: Team, points: int) -> None:
         previous_points = self.points_dict.get(team.name, 0)
         self.points_dict[team.name] = previous_points + points
 

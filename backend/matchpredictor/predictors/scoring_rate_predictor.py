@@ -21,7 +21,7 @@ class TeamScoring(object):
 class ScoringRates:
     scoring_dict: dict[str, TeamScoring]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.scoring_dict = {}
 
     def get_rate(self, team: Team) -> float:
@@ -29,7 +29,7 @@ class ScoringRates:
 
         return team_scoring.goals_per_minute()
 
-    def add_match(self, team: Team, goals: int):
+    def add_match(self, team: Team, goals: int) -> None:
         team_scoring = self.scoring_dict.get(team.name, TeamScoring(0, 0))
 
         self.scoring_dict[team.name] = TeamScoring(team_scoring.goals + goals, team_scoring.matches + 1)
