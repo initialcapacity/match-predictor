@@ -3,8 +3,8 @@ import {render} from '@testing-library/react';
 
 describe('App', () => {
     test('App', async () => {
-        const content = render(<App/>);
+        const page = render(<App/>);
 
-        expect(await content.findByText('Match Predictor')).toBeTruthy();
+        expect(await page.findByText('Match Predictor')).toBeTruthy();
     });
 });

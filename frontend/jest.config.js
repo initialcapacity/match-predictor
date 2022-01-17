@@ -7,4 +7,5 @@ module.exports = {
         '\\.svg$': '<rootDir>/src/testSupport/AssetStubs.js',
     },
     globals: {'ts-jest': {useESM: true}},
+    setupFilesAfterEnv: ['<rootDir>/src/testSupport/GlobalHelpers.js']
 };

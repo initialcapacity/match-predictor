@@ -14,6 +14,7 @@ class Fixture(object):
     away_team: Team
     season: int
     tier: Optional[int] = None
+    league: Optional[str] = None
 
 
 class Outcome(str, Enum):

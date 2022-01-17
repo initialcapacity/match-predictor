@@ -22,11 +22,21 @@ function waitForStatusOk() {
 
 info "starting frontend"
 kill $(lsof -t -i:3010) > /dev/null 2>&1
-PORT=3010 nohup npm --prefix ../frontend start &
+PORT=3010 BACKEND_PORT=5010 nohup npm --prefix ../frontend start &
 FRONTEND_PROCESS=$!
+
+info "starting backend"
+kill $(lsof -t -i:5010) > /dev/null 2>&1
+pushd ../backend > /dev/null 2>&1
+  PORT=5010 nohup python -m matchpredictor &
+popd > /dev/null 2>&1
+BACKEND_PROCESS=$!
 
 waitForStatusOk localhost:3010
 info "frontend started"
+
+waitForStatusOk localhost:5010
+info "backend started"
 
 info "starting tests"
 npm test

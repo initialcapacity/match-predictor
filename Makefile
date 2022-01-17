@@ -54,6 +54,7 @@ integration/install:
 
 .PHONY: integration/test
 integration/test:
+	source backend/env/bin/activate; \
 	cd integration-tests; \
 	./run; \
 

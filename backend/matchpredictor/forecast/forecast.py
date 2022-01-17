@@ -1,6 +1,8 @@
+from typing import Optional
+
 from flask import Blueprint, jsonify, request, Response
 
-from matchpredictor.forecast.forecaster import Forecaster
+from matchpredictor.forecast.forecaster import Forecaster, Forecast
 
 
 def forecast_api(season: int, forecaster: Forecaster) -> Blueprint:
@@ -11,13 +13,11 @@ def forecast_api(season: int, forecaster: Forecaster) -> Blueprint:
         home_team = request.args['home_team']
         away_team = request.args['away_team']
 
-        outcome = forecaster.forecast(
+        return jsonify(forecaster.forecast(
             league=league,
             home_team_name=home_team,
             away_team_name=away_team,
             season=season,
-        )
-
-        return jsonify({"outcome": outcome})
+        ))
 
     return api
