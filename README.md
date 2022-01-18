@@ -2,10 +2,10 @@
 
 A few different predictors for English football results.
 
-## Install dependencies
+## Install dependencies and run tests
 
 ```shell
-make install
+make install test
 ```
 
 ## Backend
