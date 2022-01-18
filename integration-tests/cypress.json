@@ -1,4 +1,4 @@
 {
   "nodeVersion": "bundled",
-  "defaultCommandTimeout": 10000
+  "defaultCommandTimeout": 100000
 }
