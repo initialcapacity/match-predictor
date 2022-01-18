@@ -70,14 +70,12 @@ jobs:
         run: |
           make integration/test
 
-      - name: Archive videos
+      - name: Archive artifacts
         uses: actions/upload-artifact@v2
+        if: failure()
         with:
-          name: Upload videos
-          path: integration-tests/cypress/videos/*.mp4
-
-      - name: Archive screenshots
-        uses: actions/upload-artifact@v2
-        with:
-          name: Upload screenshots
-          path: integration-tests/cypress/screenshots/*.png
+          name: test-artifacts
+          if-no-files-found: warn
+          path: |
+            integration-tests/cypress/videos/
+            integration-tests/cypress/screenshots/
