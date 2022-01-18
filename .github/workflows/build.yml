@@ -69,3 +69,9 @@ jobs:
       - name: Run tests
         run: |
           make integration/test
+
+      - name: Archive test artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: upload videos
+          path: integration-tests/cypress/videos
