@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+mkdir -p cypress/log
+LOGFILE=$(pwd)/cypress/log/integration-test.log
+rm -f $LOGFILE
+touch $LOGFILE
+
 function info() {
   echo -e "\e[34;1m$1\e[0m"
 }
@@ -22,13 +27,13 @@ function waitForStatusOk() {
 
 info "starting frontend"
 kill $(lsof -t -i:3010) > /dev/null 2>&1
-PORT=3010 BACKEND_PORT=5010 nohup npm --prefix ../frontend start &
+PORT=3010 BACKEND_PORT=5010 npm --prefix ../frontend start > $LOGFILE 2>&1 &
 FRONTEND_PROCESS=$!
 
 info "starting backend"
 kill $(lsof -t -i:5010) > /dev/null 2>&1
 pushd ../backend > /dev/null 2>&1
-  PORT=5010 nohup python -m matchpredictor &
+  PORT=5010 python -m matchpredictor > $LOGFILE 2>&1 &
 popd > /dev/null 2>&1
 BACKEND_PROCESS=$!
 

@@ -79,3 +79,4 @@ jobs:
           path: |
             integration-tests/cypress/videos/
             integration-tests/cypress/screenshots/
+            integration-tests/cypress/log/

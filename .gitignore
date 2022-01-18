@@ -5,4 +5,4 @@ node_modules
 dist
 integration-tests/cypress/screenshots
 integration-tests/cypress/videos
-nohup.out
+integration-tests/cypress/log
