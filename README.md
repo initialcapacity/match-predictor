@@ -1,6 +1,8 @@
 # Match predictor
 
-A few different predictors for English football results.
+![build status](https://github.com/tygern/match-predictor/actions/workflows/build.yml/badge.svg)
+
+A few different predictors for football results.
 
 ## Install dependencies and run tests
 
