@@ -4,10 +4,6 @@ input {
     font-size: 1rem;
 }
 
-input[type=number] {
-    width: 8rem;
-}
-
 label {
     position: relative;
     padding-top: 1.3rem;

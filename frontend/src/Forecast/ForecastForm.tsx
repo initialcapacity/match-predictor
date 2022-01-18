@@ -1,5 +1,5 @@
 import {FormEvent, ReactElement, useState} from 'react';
-import {NumberInput, TextInput} from '../Forms/Inputs';
+import {TextInput} from '../Forms/Inputs';
 import {Fixture, forecastState} from './ForecastState';
 import {useDispatch} from 'react-redux';
 import {forecastApi} from './ForecastApi';
