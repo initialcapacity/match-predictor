@@ -13,20 +13,20 @@ const SingleForecast = (props: { forecast: Forecast }): ReactElement => {
         .with('draw', () => <em>{fixture.home} v. {fixture.away}</em>)
         .exhaustive();
 
-    return <article>
-        {teams} ({props.forecast.outcome.toUpperCase()})
-    </article>;
+    return <>{teams} ({props.forecast.outcome.toUpperCase()})</>;
 };
 
 const ForecastResult = (): ReactElement => {
     const forecast = useSelector((app: AppState) => app.forecast.data);
 
-    return match(forecast)
-        .with({type: 'loading'}, () => <article>Loading</article>)
-        .with({type: 'not loaded'}, () => <article>Submit a fixture to see results</article>)
+    const result = match(forecast)
+        .with({type: 'loading'}, () => <>Loading</>)
+        .with({type: 'not loaded'}, () => <>Submit a fixture to see results</>)
         .with({type: 'loaded'}, data => <SingleForecast forecast={data.value}/>)
-        .with({type: 'failure'}, data => <article>{data.error}</article>)
+        .with({type: 'failure'}, data => <>{data.error}</>)
         .exhaustive();
+
+    return <article>{result}</article>;
 };
 
 export default ForecastResult;

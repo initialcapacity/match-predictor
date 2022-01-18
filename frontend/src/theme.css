@@ -1,9 +1,16 @@
 :root {
     --black: #222222;
-    --green: #348C31;
+    --green: #3F6634;
+    --blue: #2C365E;
+    --red: #AD343E;
+    --yellow: #F2AF29;
+    --light-gray: #EAF2EF;
     --white: #FFFFFF;
 
     --text-color: var(--black);
+    --link-color: var(--blue);
     --accent: var(--green);
     --contrast-text-color: var(--white);
+    --background: var(--light-gray);
+    --card-background: var(--white);
 }

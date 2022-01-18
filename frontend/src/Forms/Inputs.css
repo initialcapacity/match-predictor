@@ -1,0 +1,39 @@
+input {
+    padding: .3rem;
+    width: 16rem;
+    font-size: 1rem;
+}
+
+input[type=number] {
+    width: 8rem;
+}
+
+label {
+    position: relative;
+    padding-top: 1.3rem;
+    display: block;
+}
+
+fieldset {
+    display: flex;
+    gap: 1rem;
+}
+
+.versus {
+    font-weight: bold;
+    align-self: flex-end;
+    margin-bottom: .5rem;
+}
+
+fieldset:not(:last-child) {
+    margin-bottom: 2rem;
+}
+
+label span:first-child {
+    position: absolute;
+    top: 0;
+    left: .3rem;
+    font-size: .8rem;
+    font-weight: bold;
+    color: var(--accent);
+}

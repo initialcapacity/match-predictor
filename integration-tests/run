@@ -39,10 +39,9 @@ waitForStatusOk localhost:5010
 info "backend started"
 
 info "starting tests"
-if [ $KEEP_OPEN = "true" ]
+if [ "$KEEP_OPEN" = "true" ]
 then
   npm start
-  TEST_RESULT=-1
 else
   npm test
   TEST_RESULT=$?
@@ -57,12 +56,12 @@ kill $BACKEND_PROCESS
 info "complete!"
 
 echo
-if [ $TEST_RESULT -eq 0 ]
-then
-    echo -e "[ \e[32;1mSUCCESS\e[0m ]"
-elif [ $TEST_RESULT -eq -1 ]
+if [ "$KEEP_OPEN" = "true" ]
 then
     echo -e "[ \e[34;1mFINISHED\e[0m ]"
+elif [ $TEST_RESULT -eq 0 ]
+then
+    echo -e "[ \e[32;1mSUCCESS\e[0m ]"
 else
     echo -e "[ \e[31;1mFAILURE\e[0m ]"
 fi

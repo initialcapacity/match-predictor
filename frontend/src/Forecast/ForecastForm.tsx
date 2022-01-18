@@ -1,5 +1,5 @@
 import {FormEvent, ReactElement, useState} from 'react';
-import {NumberInput, Inputs} from '../Forms/Inputs';
+import {NumberInput, TextInput} from '../Forms/Inputs';
 import {Fixture, forecastState} from './ForecastState';
 import {useDispatch} from 'react-redux';
 import {forecastApi} from './ForecastApi';
@@ -36,29 +36,40 @@ const ForecastForm = (): ReactElement => {
             });
     };
 
-    return <form onSubmit={submit}>
-        <Inputs
-            label="Home"
-            value={fields.home}
-            onChange={home => setFields({...fields, home})}
-        />
-        <Inputs
-            label="Away"
-            value={fields.away}
-            onChange={away => setFields({...fields, away})}
-        />
-        <Inputs
-            label="League"
-            value={fields.league}
-            onChange={league => setFields({...fields, league})}
-        />
-        <NumberInput
-            label="Season"
-            value={fields.season || ''}
-            onChange={season => setFields({...fields, season})}
-        />
-        <button type="submit">Submit</button>
-    </form>;
+    return <article>
+        <form onSubmit={submit}>
+            <fieldset>
+                <TextInput
+                    label="Home"
+                    value={fields.home}
+                    required
+                    onChange={home => setFields({...fields, home})}
+                />
+                <span className="versus">vs.</span>
+                <TextInput
+                    label="Away"
+                    value={fields.away}
+                    required
+                    onChange={away => setFields({...fields, away})}
+                />
+            </fieldset>
+            <fieldset>
+                <TextInput
+                    label="League"
+                    value={fields.league}
+                    required
+                    onChange={league => setFields({...fields, league})}
+                />
+                <NumberInput
+                    label="Season"
+                    value={fields.season || ''}
+                    required
+                    onChange={season => setFields({...fields, season})}
+                />
+            </fieldset>
+            <button type="submit">Submit</button>
+        </form>
+    </article>;
 };
 
 export default ForecastForm;
