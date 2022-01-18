@@ -9,7 +9,6 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
                 required: {
                     home_team: schemawax.object({required: {name: schemawax.string}}),
                     away_team: schemawax.object({required: {name: schemawax.string}}),
-                    season: schemawax.number,
                     league: schemawax.string,
                 }
             }),
@@ -19,7 +18,6 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
         fixture: {
             home: json.fixture.home_team.name,
             away: json.fixture.away_team.name,
-            season: json.fixture.season,
             league: json.fixture.league,
         },
         outcome: json.outcome
@@ -31,7 +29,7 @@ const fetchFor = (fixture: Fixture): Promise<Forecast> => {
         away_team: fixture.away,
     });
 
-    return http.sendRequest(`/api/forecast/${fixture.league}/${fixture.season}?${params}`, forecastDecoder);
+    return http.sendRequest(`/api/forecast/${fixture.league}?${params}`, forecastDecoder);
 };
 
 export const forecastApi = {

@@ -27,7 +27,7 @@ class LinearRegressionPredictor(Predictor):
         if encoded_away_name is None:
             return Outcome.HOME
 
-        x: NDArray[float64] = np.concatenate([encoded_home_name, encoded_away_name], 1) # type: ignore
+        x: NDArray[float64] = np.concatenate([encoded_home_name, encoded_away_name], 1)  # type: ignore
         pred = self.model.predict(x)
 
         if pred > 0:
@@ -39,7 +39,7 @@ class LinearRegressionPredictor(Predictor):
 
     def __encode_team(self, team: Team) -> Optional[NDArray[float64]]:
         try:
-            return self.team_encoding.transform(np.array(team.name).reshape(-1, 1)) # type: ignore
+            return self.team_encoding.transform(np.array(team.name).reshape(-1, 1))  # type: ignore
         except ValueError:
             return None
 

@@ -8,7 +8,6 @@ export type Outcome = 'home' | 'away' | 'draw'
 export type Fixture = {
     home: string,
     away: string,
-    season: number,
     league: string,
 }
 

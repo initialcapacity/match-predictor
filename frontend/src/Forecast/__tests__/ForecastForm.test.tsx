@@ -23,7 +23,6 @@ describe('ForecastForm', () => {
             fixture: {
                 home: 'Chelsea',
                 away: 'Manchester City',
-                season: 2022,
                 league: 'england',
             },
             outcome: 'home'
@@ -39,8 +38,6 @@ describe('ForecastForm', () => {
         userEvent.type(page.getByLabelText('Home'), 'Chelsea');
         userEvent.type(page.getByLabelText('Away'), 'Manchester City');
         userEvent.type(page.getByLabelText('League'), 'england');
-        userEvent.clear(page.getByLabelText('Season'));
-        userEvent.type(page.getByLabelText('Season'), '2022');
 
         page.getByText('Submit').click();
 
@@ -49,7 +46,6 @@ describe('ForecastForm', () => {
             away: 'Manchester City',
             home: 'Chelsea',
             league: 'england',
-            season: 2022
         });
 
         await waitForPromise(mockResponse);
@@ -68,8 +64,6 @@ describe('ForecastForm', () => {
         userEvent.type(page.getByLabelText('Home'), 'Chelsea');
         userEvent.type(page.getByLabelText('Away'), 'Manchester City');
         userEvent.type(page.getByLabelText('League'), 'england');
-        userEvent.clear(page.getByLabelText('Season'));
-        userEvent.type(page.getByLabelText('Season'), '2022');
 
         page.getByText('Submit').click();
 

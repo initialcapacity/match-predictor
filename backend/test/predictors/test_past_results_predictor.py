@@ -16,7 +16,7 @@ class TestPastResultsPredictor(TestCase):
         self.assertGreaterEqual(accuracy, .33)
 
     def test_accuracy_last_two_seasons(self) -> None:
-        training_data = training_results('england.csv', 2019, result_filter=lambda result: result.fixture.season >= 2017)
+        training_data = training_results('england.csv', 2019, result_filter=lambda result: result.season >= 2017)
         validation_data = validation_results('england.csv', 2019)
         predictor = train_results_predictor(training_data)
 

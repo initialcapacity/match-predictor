@@ -1,6 +1,6 @@
 import csv
 from os import path
-from typing import Dict, Callable, List, Iterable
+from typing import Dict, Callable, List
 
 from matchpredictor.matchresults.result import Result, Fixture, Team, Outcome
 
@@ -10,7 +10,7 @@ def training_results(
         year: int,
         result_filter: Callable[[Result], bool] = lambda result: True
 ) -> List[Result]:
-    return _load_results(data_file, lambda r: result_filter(r) and r.fixture.season < year)
+    return _load_results(data_file, lambda r: result_filter(r) and r.season < year)
 
 
 def validation_results(
@@ -18,7 +18,7 @@ def validation_results(
         year: int,
         result_filter: Callable[[Result], bool] = lambda result: True
 ) -> List[Result]:
-    return _load_results(data_file, lambda r: result_filter(r) and r.fixture.season == year)
+    return _load_results(data_file, lambda r: result_filter(r) and r.season == year)
 
 
 def _load_results(data_file: str, result_filter: Callable[[Result], bool]) -> List[Result]:
@@ -33,7 +33,6 @@ def row_to_result(row: Dict[str, str]) -> Result:
         home_team=Team(row['home']),
         away_team=Team(row['visitor']),
         tier=int(row['tier']),
-        season=int(row['Season']),
     )
 
     home_goals = int(row['hgoal'])
@@ -45,10 +44,11 @@ def row_to_result(row: Dict[str, str]) -> Result:
         outcome=outcome,
         home_goals=home_goals,
         away_goals=away_goals,
+        season=int(row['Season']),
     )
 
 
-def determine_outcome(away_goals: int, home_goals:int) -> Outcome:
+def determine_outcome(away_goals: int, home_goals: int) -> Outcome:
     if home_goals > away_goals:
         return Outcome.HOME
     elif home_goals < away_goals:

@@ -12,7 +12,6 @@ class Team(object):
 class Fixture(object):
     home_team: Team
     away_team: Team
-    season: int
     tier: Optional[int] = None
     league: Optional[str] = None
 
@@ -29,3 +28,4 @@ class Result(object):
     outcome: Outcome
     home_goals: int
     away_goals: int
+    season: int

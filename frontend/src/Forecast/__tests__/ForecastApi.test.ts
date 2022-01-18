@@ -12,13 +12,12 @@ describe('ForecastApi', () => {
     test('fetchFor', async () => {
         let searchParams: URLSearchParams = new URLSearchParams();
         server.use(
-            rest.get('/api/forecast/england/2020', (req, res, ctx) => {
+            rest.get('/api/forecast/england', (req, res, ctx) => {
                 searchParams = req.url.searchParams;
                 return res(ctx.json({
                     fixture: {
                         home_team: {name: 'Chelsea'},
                         away_team: {name: 'Brighton'},
-                        season: 2020,
                         league: 'england',
                     },
                     outcome: 'home'
@@ -30,7 +29,6 @@ describe('ForecastApi', () => {
             home: 'Chelsea',
             away: 'Brighton',
             league: 'england',
-            season: 2020
         });
 
         expect(searchParams.get('home_team')).toEqual('Chelsea');
@@ -40,7 +38,6 @@ describe('ForecastApi', () => {
                 home: 'Chelsea',
                 away: 'Brighton',
                 league: 'england',
-                season: 2020
             },
             outcome: 'home'
         });

@@ -9,7 +9,6 @@ const emptyFixture = {
     home: '',
     away: '',
     league: '',
-    season: 2021
 };
 
 const ForecastForm = (): ReactElement => {
@@ -23,7 +22,6 @@ const ForecastForm = (): ReactElement => {
             home: fields.home,
             away: fields.away,
             league: fields.league,
-            season: fields.season,
         };
 
         forecastApi.fetchFor(fixture)
@@ -59,12 +57,6 @@ const ForecastForm = (): ReactElement => {
                     value={fields.league}
                     required
                     onChange={league => setFields({...fields, league})}
-                />
-                <NumberInput
-                    label="Season"
-                    value={fields.season || ''}
-                    required
-                    onChange={season => setFields({...fields, season})}
                 />
             </fieldset>
             <button type="submit">Submit</button>

@@ -1,14 +1,12 @@
-from typing import Optional
-
 from flask import Blueprint, jsonify, request, Response
 
-from matchpredictor.forecast.forecaster import Forecaster, Forecast
+from matchpredictor.forecast.forecaster import Forecaster
 
 
-def forecast_api(season: int, forecaster: Forecaster) -> Blueprint:
+def forecast_api(forecaster: Forecaster) -> Blueprint:
     api = Blueprint("forecast_api", __name__)
 
-    @api.route(f"/<string:league>/{season}", methods=["GET"])
+    @api.route(f"/<string:league>", methods=["GET"])
     def forecast(league: str) -> Response:
         home_team = request.args['home_team']
         away_team = request.args['away_team']
@@ -17,7 +15,6 @@ def forecast_api(season: int, forecaster: Forecaster) -> Blueprint:
             league=league,
             home_team_name=home_team,
             away_team_name=away_team,
-            season=season,
         ))
 
     return api
