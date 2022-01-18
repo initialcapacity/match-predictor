@@ -29,9 +29,7 @@ const ForecastForm = (): ReactElement => {
                 setFields(emptyFixture);
                 dispatch(forecastState.finishedLoading(result.ok(forecast)));
             })
-            .catch(message => {
-                return dispatch(forecastState.finishedLoading(result.err(message)));
-            });
+            .catch(message => dispatch(forecastState.finishedLoading(result.err(message))));
     };
 
     return <article>

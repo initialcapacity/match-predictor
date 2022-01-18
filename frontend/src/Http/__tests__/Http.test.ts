@@ -10,11 +10,7 @@ describe('ForecastApi', () => {
     afterEach(() => server.resetHandlers());
     afterAll(() => server.close());
 
-    const decoder = schemawax.object({
-        required: {
-            success: schemawax.boolean
-        }
-    });
+    const decoder = schemawax.object({required: {success: schemawax.boolean}});
 
     test('success', async () => {
         server.use(rest.get('/success', (req, res, ctx) => res(ctx.json({success: true}))));

@@ -10,8 +10,6 @@ export type Err<E> = {
 
 export type Result<T, E> = (Ok<T> | Err<E>)
 
-
-
 const ok = <T, E>(data: T): Result<T, E> => ({
     isOk: true,
     data,

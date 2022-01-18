@@ -1,5 +1,4 @@
 import time
-from fractions import Fraction
 from typing import Iterable, Tuple
 
 from matchpredictor.matchresults.result import Result
