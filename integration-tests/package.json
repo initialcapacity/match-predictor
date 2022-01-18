@@ -2,8 +2,8 @@
   "name": "integration-tests",
   "version": "0.0.1",
   "scripts": {
-    "start": "cypress open --browser chrome",
-    "test": "cypress run --browser chrome"
+    "start": "cypress open",
+    "test": "cypress run"
   },
   "devDependencies": {
     "cypress": "^9.2.1"
