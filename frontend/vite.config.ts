@@ -13,7 +13,7 @@ export default defineConfig({
         port: parseInt(process.env.PORT) || 3001,
         proxy: {
             '/api': {
-                target: `http://localhost:${backendPort}`,
+                target: `http://127.0.0.1:${backendPort}`,
                 rewrite: path => path.replace(/^\/api/, '')
             }
         },
