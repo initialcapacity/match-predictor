@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from random import random
-from typing import Iterable
+from typing import Iterable, Dict
 
 from matchpredictor.predictors.predictor import Predictor
 from matchpredictor.matchresults.result import Team, Fixture, Outcome, Result
@@ -19,7 +19,7 @@ class TeamScoring(object):
 
 
 class ScoringRates:
-    scoring_dict: dict[str, TeamScoring]
+    scoring_dict: Dict[str, TeamScoring]
 
     def __init__(self) -> None:
         self.scoring_dict = {}
