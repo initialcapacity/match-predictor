@@ -23,7 +23,6 @@ describe('ForecastForm', () => {
             fixture: {
                 home: 'Chelsea',
                 away: 'Manchester City',
-                league: 'england',
             },
             outcome: 'home'
         };
@@ -37,7 +36,6 @@ describe('ForecastForm', () => {
 
         userEvent.type(page.getByLabelText('Home'), 'Chelsea');
         userEvent.type(page.getByLabelText('Away'), 'Manchester City');
-        userEvent.type(page.getByLabelText('League'), 'england');
 
         page.getByText('Submit').click();
 
@@ -45,7 +43,6 @@ describe('ForecastForm', () => {
         expect(mocked(forecastApi).fetchFor.mock.calls[0][0]).toEqual({
             away: 'Manchester City',
             home: 'Chelsea',
-            league: 'england',
         });
 
         await waitForPromise(mockResponse);
@@ -63,7 +60,6 @@ describe('ForecastForm', () => {
 
         userEvent.type(page.getByLabelText('Home'), 'Chelsea');
         userEvent.type(page.getByLabelText('Away'), 'Manchester City');
-        userEvent.type(page.getByLabelText('League'), 'england');
 
         page.getByText('Submit').click();
 

@@ -8,7 +8,6 @@ import {result} from '../Http/Result';
 const emptyFixture = {
     home: '',
     away: '',
-    league: '',
 };
 
 const ForecastForm = (): ReactElement => {
@@ -21,7 +20,6 @@ const ForecastForm = (): ReactElement => {
         const fixture = {
             home: fields.home,
             away: fields.away,
-            league: fields.league,
         };
 
         forecastApi.fetchFor(fixture)
@@ -47,14 +45,6 @@ const ForecastForm = (): ReactElement => {
                     value={fields.away}
                     required
                     onChange={away => setFields({...fields, away})}
-                />
-            </fieldset>
-            <fieldset>
-                <TextInput
-                    label="League"
-                    value={fields.league}
-                    required
-                    onChange={league => setFields({...fields, league})}
                 />
             </fieldset>
             <button type="submit">Submit</button>

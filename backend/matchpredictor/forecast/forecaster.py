@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from matchpredictor.matchresults.result import Fixture, Team, Outcome
-from matchpredictor.predictors.predictor import PredictorProvider
+from matchpredictor.predictors.predictor import Predictor
 
 
 @dataclass(frozen=True)
@@ -12,21 +12,16 @@ class Forecast(object):
 
 
 class Forecaster:
-    def __init__(self, provider: PredictorProvider) -> None:
-        self.provider = provider
+    def __init__(self, predictor: Predictor) -> None:
+        self.predictor = predictor
 
-    def forecast(self, league: str, home_team_name: str, away_team_name: str) -> Optional[Forecast]:
-        predictor = self.provider.get(league)
-        if predictor is None:
-            return None
-
+    def forecast(self, home_team_name: str, away_team_name: str) -> Optional[Forecast]:
         fixture = Fixture(
             home_team=Team(home_team_name),
             away_team=Team(away_team_name),
-            league=league,
         )
 
-        outcome = predictor.predict(fixture)
+        outcome = self.predictor.predict(fixture)
 
         if outcome is None:
             return None

@@ -13,7 +13,6 @@ class Fixture(object):
     home_team: Team
     away_team: Team
     tier: Optional[int] = None
-    league: Optional[str] = None
 
 
 class Outcome(str, Enum):

@@ -36,7 +36,6 @@ describe('ForecastResult', () => {
             fixture: {
                 home: 'Chelsea',
                 away: 'Burnley',
-                league: 'england',
                 season: 2020
             },
             outcome: 'draw'
