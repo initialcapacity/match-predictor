@@ -22,7 +22,7 @@ describe('ForecastForm', () => {
         const forecast: Forecast = {
             fixture: {
                 home: 'Chelsea',
-                away: 'Manchester City',
+                away: 'Tottenham Hotspur',
             },
             outcome: 'home'
         };
@@ -34,14 +34,14 @@ describe('ForecastForm', () => {
             <ForecastForm/>
         </TestAppContext>);
 
-        userEvent.type(page.getByLabelText('Home'), 'Chelsea');
-        userEvent.type(page.getByLabelText('Away'), 'Manchester City');
+        userEvent.selectOptions(page.getByLabelText('Home'), 'Chelsea');
+        userEvent.selectOptions(page.getByLabelText('Away'), 'Tottenham Hotspur');
 
         page.getByText('Submit').click();
 
         expect(mocked(forecastApi).fetchFor.mock.calls.length).toEqual(1);
         expect(mocked(forecastApi).fetchFor.mock.calls[0][0]).toEqual({
-            away: 'Manchester City',
+            away: 'Tottenham Hotspur',
             home: 'Chelsea',
         });
 
@@ -59,7 +59,7 @@ describe('ForecastForm', () => {
         </TestAppContext>);
 
         userEvent.type(page.getByLabelText('Home'), 'Chelsea');
-        userEvent.type(page.getByLabelText('Away'), 'Manchester City');
+        userEvent.type(page.getByLabelText('Away'), 'Tottenham Hotspur');
 
         page.getByText('Submit').click();
 

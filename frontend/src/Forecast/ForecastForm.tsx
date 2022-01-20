@@ -1,5 +1,5 @@
 import {FormEvent, ReactElement, useState} from 'react';
-import {TextInput} from '../Forms/Inputs';
+import {Select} from '../Forms/Inputs';
 import {Fixture, forecastState} from './ForecastState';
 import {useDispatch} from 'react-redux';
 import {forecastApi} from './ForecastApi';
@@ -30,20 +30,32 @@ const ForecastForm = (): ReactElement => {
             .catch(message => dispatch(forecastState.finishedLoading(result.err(message))));
     };
 
+    const teams = [
+        'Chelsea',
+        'Tottenham Hotspur',
+        'Arsenal',
+        'Juventus',
+        'Southampton',
+    ];
+
     return <article>
         <form onSubmit={submit}>
             <fieldset>
-                <TextInput
+                <Select
+                    id="home-team"
                     label="Home"
                     value={fields.home}
                     required
+                    options={teams}
                     onChange={home => setFields({...fields, home})}
                 />
                 <span className="versus">vs.</span>
-                <TextInput
+                <Select
+                    id="away-team"
                     label="Away"
                     value={fields.away}
                     required
+                    options={teams}
                     onChange={away => setFields({...fields, away})}
                 />
             </fieldset>
