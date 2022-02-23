@@ -8,8 +8,10 @@ import {forecastApi} from '../ForecastApi';
 import {Forecast} from '../ForecastState';
 import {mocked} from 'jest-mock';
 import {waitForPromise} from '../../testSupport/PromiseHelpers';
+import {teamsApi} from '../../Teams/TeamsApi';
 
 jest.mock('../ForecastApi');
+jest.mock('../../Teams/TeamsApi');
 
 describe('ForecastForm', () => {
     let store: Store<AppState>;
@@ -27,12 +29,25 @@ describe('ForecastForm', () => {
             outcome: 'home'
         };
 
-        const mockResponse = Promise.resolve(forecast);
-        mocked(forecastApi).fetchFor.mockImplementation(() => mockResponse);
+        const teams: string[] = [
+            'Chelsea',
+            'Tottenham Hotspur',
+            'Arsenal',
+            'Juventus',
+            'Southampton',
+        ];
+
+        const mockForecastResponse = Promise.resolve(forecast);
+        mocked(forecastApi).fetchFor.mockImplementation(() => mockForecastResponse);
+
+        const mockTeamsResponse = Promise.resolve(teams);
+        mocked(teamsApi).fetch.mockImplementation(() => mockTeamsResponse);
 
         const page = render(<TestAppContext store={store}>
             <ForecastForm/>
         </TestAppContext>);
+
+        await waitForPromise(mockTeamsResponse);
 
         userEvent.selectOptions(page.getByLabelText('Home'), 'Chelsea');
         userEvent.selectOptions(page.getByLabelText('Away'), 'Tottenham Hotspur');
@@ -45,7 +60,7 @@ describe('ForecastForm', () => {
             home: 'Chelsea',
         });
 
-        await waitForPromise(mockResponse);
+        await waitForPromise(mockForecastResponse);
 
         expect(store.getState().forecast.data.type).toEqual('loaded');
     });

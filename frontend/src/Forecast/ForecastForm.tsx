@@ -1,9 +1,10 @@
-import {FormEvent, ReactElement, useState} from 'react';
+import {FormEvent, ReactElement, useEffect, useState} from 'react';
 import {Select} from '../Forms/Inputs';
 import {Fixture, forecastState} from './ForecastState';
 import {useDispatch} from 'react-redux';
 import {forecastApi} from './ForecastApi';
 import {result} from '../Http/Result';
+import {teamsApi} from '../Teams/TeamsApi';
 
 const emptyFixture = {
     home: '',
@@ -12,7 +13,12 @@ const emptyFixture = {
 
 const ForecastForm = (): ReactElement => {
     const [fields, setFields] = useState<Fixture>(emptyFixture);
+    const [teams, setTeams] = useState<string[]>([]);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        teamsApi.fetch().then(teams => setTeams(teams));
+    }, []);
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
@@ -29,14 +35,6 @@ const ForecastForm = (): ReactElement => {
             })
             .catch(message => dispatch(forecastState.finishedLoading(result.err(message))));
     };
-
-    const teams = [
-        'Chelsea',
-        'Tottenham Hotspur',
-        'Arsenal',
-        'Juventus',
-        'Southampton',
-    ];
 
     return <article>
         <form onSubmit={submit}>
