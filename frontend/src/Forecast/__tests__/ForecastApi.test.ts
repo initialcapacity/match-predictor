@@ -16,8 +16,8 @@ describe('ForecastApi', () => {
                 receivedSearchParams = req.url.searchParams;
                 return res(ctx.json({
                     fixture: {
-                        home_team: {name: 'Chelsea'},
-                        away_team: {name: 'Brighton'},
+                        home_team: {name: 'Chelsea', country: 'england'},
+                        away_team: {name: 'Brighton', country: 'england'},
                     },
                     outcome: 'home'
                 }));
@@ -25,16 +25,18 @@ describe('ForecastApi', () => {
         );
 
         const result = await forecastApi.fetchFor({
-            home: 'Chelsea',
-            away: 'Brighton',
+            home: {name: 'Chelsea', country: 'england'},
+            away: {name: 'Brighton', country: 'england'},
         });
 
-        expect(receivedSearchParams.get('home_team')).toEqual('Chelsea');
-        expect(receivedSearchParams.get('away_team')).toEqual('Brighton');
+        expect(receivedSearchParams.get('home_name')).toEqual('Chelsea');
+        expect(receivedSearchParams.get('home_country')).toEqual('england');
+        expect(receivedSearchParams.get('away_name')).toEqual('Brighton');
+        expect(receivedSearchParams.get('away_country')).toEqual('england');
         expect(result).toEqual({
             fixture: {
-                home: 'Chelsea',
-                away: 'Brighton',
+                home: {name: 'Chelsea', country: 'england'},
+                away: {name: 'Brighton', country: 'england'},
             },
             outcome: 'home'
         });

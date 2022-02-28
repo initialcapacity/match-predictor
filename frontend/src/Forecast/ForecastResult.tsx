@@ -8,9 +8,9 @@ const SingleForecast = (props: { forecast: Forecast }): ReactElement => {
     const fixture = props.forecast.fixture;
 
     const teams = match(props.forecast.outcome)
-        .with('home', () => <><strong>{fixture.home}</strong> v. {fixture.away}</>)
-        .with('away', () => <>{fixture.home} v. <strong>{fixture.away}</strong></>)
-        .with('draw', () => <em>{fixture.home} v. {fixture.away}</em>)
+        .with('home', () => <><strong>{fixture.home.name}</strong> v. {fixture.away.name}</>)
+        .with('away', () => <>{fixture.home.name} v. <strong>{fixture.away.name}</strong></>)
+        .with('draw', () => <em>{fixture.home.name} v. {fixture.away.name}</em>)
         .exhaustive();
 
     return <>{teams} ({props.forecast.outcome.toUpperCase()})</>;

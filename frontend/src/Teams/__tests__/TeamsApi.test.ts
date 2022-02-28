@@ -13,13 +13,13 @@ describe('ForecastApi', () => {
         server.use(
             rest.get('/api/teams', (req, res, ctx) => {
                 return res(ctx.json({
-                    teams: ['Chelsea', 'AS Roma'],
+                    teams: [{name: 'Chelsea', country: 'england'}, {name: 'AS Roma', country: 'italy'}],
                 }));
             })
         );
 
         const result = await teamsApi.fetch();
 
-        expect(result).toEqual(['Chelsea', 'AS Roma']);
+        expect(result).toEqual([{name: 'Chelsea', country: 'england'}, {name: 'AS Roma', country: 'italy'}]);
     });
 });

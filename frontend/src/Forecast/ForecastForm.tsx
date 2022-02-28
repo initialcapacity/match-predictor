@@ -1,36 +1,35 @@
 import {FormEvent, ReactElement, useEffect, useState} from 'react';
-import {Select} from '../Forms/Inputs';
-import {Fixture, forecastState} from './ForecastState';
-import {useDispatch} from 'react-redux';
+import {forecastState} from './ForecastState';
+import {useDispatch, useSelector} from 'react-redux';
 import {forecastApi} from './ForecastApi';
 import {result} from '../Http/Result';
 import {teamsApi} from '../Teams/TeamsApi';
-
-const emptyFixture = {
-    home: '',
-    away: '',
-};
+import {Fixture, fixtureState} from '../Teams/FixtureState';
+import TeamPicker from '../Teams/TeamSelector';
+import {AppState} from '../App/StateStore';
+import {teamsState} from '../Teams/TeamsState';
 
 const ForecastForm = (): ReactElement => {
-    const [fields, setFields] = useState<Fixture>(emptyFixture);
-    const [teams, setTeams] = useState<string[]>([]);
     const dispatch = useDispatch();
 
+    const fixture = useSelector((app: AppState) => app.fixture);
+
     useEffect(() => {
-        teamsApi.fetch().then(teams => setTeams(teams));
+        dispatch(teamsState.startLoading);
+        teamsApi.fetch()
+            .then(teams => dispatch(teamsState.finishedLoading(result.ok(teams))))
+            .catch(message => dispatch(teamsState.finishedLoading(result.err(message))));
     }, []);
+
 
     const submit = (e: FormEvent) => {
         e.preventDefault();
+        if (!fixture.home || !fixture.away) return;
         dispatch(forecastState.startLoading);
-        const fixture = {
-            home: fields.home,
-            away: fields.away,
-        };
 
-        forecastApi.fetchFor(fixture)
+        forecastApi.fetchFor(fixture as Fixture)
             .then(forecast => {
-                setFields(emptyFixture);
+                dispatch(fixtureState.clear);
                 dispatch(forecastState.finishedLoading(result.ok(forecast)));
             })
             .catch(message => dispatch(forecastState.finishedLoading(result.err(message))));
@@ -38,25 +37,9 @@ const ForecastForm = (): ReactElement => {
 
     return <article>
         <form onSubmit={submit}>
-            <fieldset>
-                <Select
-                    id="home-team"
-                    label="Home"
-                    value={fields.home}
-                    required
-                    options={teams}
-                    onChange={home => setFields({...fields, home})}
-                />
-                <span className="versus">vs.</span>
-                <Select
-                    id="away-team"
-                    label="Away"
-                    value={fields.away}
-                    required
-                    options={teams}
-                    onChange={away => setFields({...fields, away})}
-                />
-            </fieldset>
+            <TeamPicker side="home"/>
+            <TeamPicker side="away"/>
+
             <button type="submit">Submit</button>
         </form>
     </article>;

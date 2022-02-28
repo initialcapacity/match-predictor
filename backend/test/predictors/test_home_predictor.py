@@ -7,7 +7,7 @@ from matchpredictor.evaluation.evaluator import Evaluator
 
 class TestHomePredictor(TestCase):
     def test_accuracy(self) -> None:
-        validation_data = validation_results('england.csv', 2019)
+        validation_data = validation_results('england', 2019)
         accuracy, _ = Evaluator(HomePredictor()).measure_accuracy(validation_data)
 
         self.assertGreaterEqual(accuracy, .33)

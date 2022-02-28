@@ -6,6 +6,7 @@ from typing import Optional
 @dataclass(frozen=True)
 class Team(object):
     name: str
+    country: str
 
 
 @dataclass(frozen=True)

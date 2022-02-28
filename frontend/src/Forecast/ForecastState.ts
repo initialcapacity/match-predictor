@@ -2,13 +2,9 @@ import {Action, Reducer} from 'redux';
 import {match} from 'ts-pattern';
 import {remoteData, RemoteData} from '../Http/RemoteData';
 import {Result} from '../Http/Result';
+import {Fixture} from '../Teams/FixtureState';
 
 export type Outcome = 'home' | 'away' | 'draw'
-
-export type Fixture = {
-    home: string,
-    away: string,
-}
 
 export type Forecast = {
     outcome: Outcome,

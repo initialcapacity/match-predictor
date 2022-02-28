@@ -8,10 +8,8 @@ def teams_api(teams_provider: TeamsProvider) -> Blueprint:
 
     @api.route("/teams", methods=["GET"])
     def teams() -> Response:
-        team_names = list(map(lambda team: team.name, teams_provider.unique_teams()))
-
         return jsonify({
-            "teams": team_names
+            "teams": list(teams_provider.unique_teams())
         })
 
     return api

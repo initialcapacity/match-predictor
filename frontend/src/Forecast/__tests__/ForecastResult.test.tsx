@@ -34,8 +34,8 @@ describe('ForecastResult', () => {
     test('loaded', async () => {
         store.dispatch(forecastState.finishedLoading(result.ok({
             fixture: {
-                home: 'Chelsea',
-                away: 'Burnley',
+                home: {name: 'Chelsea', country: 'england'},
+                away: {name: 'Burnley', country: 'england'},
                 season: 2020
             },
             outcome: 'draw'

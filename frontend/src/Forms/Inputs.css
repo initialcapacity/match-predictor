@@ -6,8 +6,13 @@ input, select {
 
 label {
     position: relative;
-    padding-top: 1.3rem;
+    padding-top: 1.6rem;
     display: block;
+}
+
+legend {
+    font-weight: bold;
+    color: var(--accent);
 }
 
 fieldset {
@@ -27,7 +32,7 @@ fieldset:not(:last-child) {
 
 label span:first-child {
     position: absolute;
-    top: 0;
+    top: .5rem;
     left: .3rem;
     font-size: .8rem;
     font-weight: bold;

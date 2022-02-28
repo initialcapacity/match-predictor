@@ -1,14 +1,20 @@
 import * as schemawax from 'schemawax';
 import {http} from '../Http/Http';
+import {Team} from './TeamsState';
 
-const teamsDecoder: schemawax.Decoder<string[]> =
+const teamsDecoder: schemawax.Decoder<Team[]> =
     schemawax.object({
         required: {
-            teams: schemawax.array(schemawax.string)
+            teams: schemawax.array(schemawax.object({
+                required: {
+                    name: schemawax.string,
+                    country: schemawax.string,
+                }
+            }))
         }
-    }).andThen((json): string[] => json.teams);
+    }).andThen((json): Team[] => json.teams);
 
-const fetch = (): Promise<string[]> => {
+const fetch = (): Promise<Team[]> => {
     return http.sendRequest('/api/teams', teamsDecoder);
 };
 

@@ -6,32 +6,32 @@ from matchpredictor.matchresults.result import Result, Fixture, Team, Outcome
 
 
 def training_results(
-        data_file: str,
+        country: str,
         year: int,
-        result_filter: Callable[[Result], bool] = lambda result: True
+        result_filter: Callable[[Result], bool] = lambda result: True,
 ) -> List[Result]:
-    return _load_results(data_file, lambda r: result_filter(r) and r.season < year)
+    return _load_results(f"{country}.csv", country, lambda r: result_filter(r) and r.season < year)
 
 
 def validation_results(
-        data_file: str,
+        country: str,
         year: int,
         result_filter: Callable[[Result], bool] = lambda result: True
 ) -> List[Result]:
-    return _load_results(data_file, lambda r: result_filter(r) and r.season == year)
+    return _load_results(f"{country}.csv", country, lambda r: result_filter(r) and r.season == year)
 
 
-def _load_results(data_file: str, result_filter: Callable[[Result], bool]) -> List[Result]:
+def _load_results(data_file: str, country: str, result_filter: Callable[[Result], bool]) -> List[Result]:
     with open(path.join('data', data_file)) as training_data:
         rows = csv.DictReader(training_data)
 
-        return list(filter(result_filter, map(row_to_result, rows)))
+        return list(filter(result_filter, map(lambda row: row_to_result(row, country), rows)))
 
 
-def row_to_result(row: Dict[str, str]) -> Result:
+def row_to_result(row: Dict[str, str], country: str) -> Result:
     fixture = Fixture(
-        home_team=Team(row['home']),
-        away_team=Team(row['visitor']),
+        home_team=Team(row['home'], country),
+        away_team=Team(row['visitor'], country),
         tier=int(row['tier']),
     )
 
