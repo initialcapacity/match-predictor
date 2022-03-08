@@ -1,6 +1,6 @@
 import {useSelector} from 'react-redux';
 import {AppState} from '../App/StateStore';
-import {match} from 'ts-pattern';
+import {match, __} from 'ts-pattern';
 import {ReactElement} from 'react';
 import {Forecast} from './ForecastState';
 
@@ -13,7 +13,18 @@ const SingleForecast = (props: { forecast: Forecast }): ReactElement => {
         .with('draw', () => <em>{fixture.home.name} v. {fixture.away.name}</em>)
         .exhaustive();
 
-    return <>{teams} ({props.forecast.outcome.toUpperCase()})</>;
+    const confidenceHtml = match(props.forecast.confidence)
+        .with(undefined, () => <></>)
+        .with(__.number, (confidence) => {
+            const roundedConfidence = Math.round(confidence * 100);
+            return <div>Confidence: {roundedConfidence}%</div>;
+        })
+        .exhaustive();
+
+    return <>
+        <div>{teams} ({props.forecast.outcome.toUpperCase()})</div>
+        {confidenceHtml}
+    </>;
 };
 
 const ForecastResult = (): ReactElement => {

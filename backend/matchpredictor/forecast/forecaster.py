@@ -9,6 +9,7 @@ from matchpredictor.predictors.predictor import Predictor
 class Forecast(object):
     fixture: Fixture
     outcome: Outcome
+    confidence: Optional[float]
 
 
 class Forecaster:
@@ -22,9 +23,9 @@ class Forecaster:
             league=league,
         )
 
-        outcome = self.predictor.predict(fixture)
+        outcome, confidence = self.predictor.predict(fixture)
 
         if outcome is None:
             return None
 
-        return Forecast(fixture=fixture, outcome=outcome)
+        return Forecast(fixture=fixture, outcome=outcome, confidence=confidence)

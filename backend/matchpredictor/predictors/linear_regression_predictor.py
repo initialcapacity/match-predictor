@@ -18,24 +18,24 @@ class LinearRegressionPredictor(Predictor):
         self.model = model
         self.team_encoding = team_encoding
 
-    def predict(self, fixture: Fixture) -> Outcome:
+    def predict(self, fixture: Fixture) -> Tuple[Outcome, Optional[float]]:
         encoded_home_name = self.__encode_team(fixture.home_team)
         encoded_away_name = self.__encode_team(fixture.away_team)
 
         if encoded_home_name is None:
-            return Outcome.AWAY
+            return Outcome.AWAY, None
         if encoded_away_name is None:
-            return Outcome.HOME
+            return Outcome.HOME, None
 
         x: NDArray[float64] = np.concatenate([encoded_home_name, encoded_away_name], 1)  # type: ignore
         pred = self.model.predict(x)
 
         if pred > 0:
-            return Outcome.HOME
+            return Outcome.HOME, None
         elif pred < 0:
-            return Outcome.AWAY
+            return Outcome.AWAY, None
         else:
-            return Outcome.DRAW
+            return Outcome.DRAW, None
 
     def __encode_team(self, team: Team) -> Optional[NDArray[float64]]:
         try:

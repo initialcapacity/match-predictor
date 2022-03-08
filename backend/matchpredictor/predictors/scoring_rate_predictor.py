@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from random import random
-from typing import Iterable, Dict
+from typing import Iterable, Dict, Optional, Tuple
 
 from matchpredictor.predictors.predictor import Predictor
 from matchpredictor.matchresults.result import Team, Fixture, Outcome, Result
@@ -40,10 +40,19 @@ class ScoringRatePredictor(Predictor):
         self.scoring_rates = scoring_rates
         self.simulations = simulations
 
-    def predict(self, fixture: Fixture) -> Outcome:
+    def predict(self, fixture: Fixture) -> Tuple[Outcome, Optional[float]]:
         results = [self.__simulate(fixture) for _ in range(self.simulations)]
 
-        return max(set(results), key=results.count)
+        home_count = sum(map(lambda r: r is Outcome.HOME, results))
+        away_count = sum(map(lambda r: r is Outcome.AWAY, results))
+        draw_count = sum(map(lambda r: r is Outcome.DRAW, results))
+
+        if home_count > away_count and home_count > draw_count:
+            return Outcome.HOME, home_count / self.simulations
+        if away_count > draw_count:
+            return Outcome.AWAY, away_count / self.simulations
+        else:
+            return Outcome.DRAW, draw_count / self.simulations
 
     def __simulate(self, fixture: Fixture) -> Outcome:
         home_goal_rate = self.scoring_rates.get_rate(fixture.home_team)

@@ -7,8 +7,9 @@ import {Fixture} from '../Teams/FixtureState';
 export type Outcome = 'home' | 'away' | 'draw'
 
 export type Forecast = {
+    fixture: Fixture,
     outcome: Outcome,
-    fixture: Fixture
+    confidence?: number,
 };
 
 export type ForecastState = {

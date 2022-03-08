@@ -50,6 +50,44 @@ describe('ForecastResult', () => {
         expect(page.container.textContent).toContain('DRAW');
     });
 
+    test('loaded with confidence', async () => {
+        store.dispatch(forecastState.finishedLoading(result.ok({
+            fixture: {
+                home: {name: 'Chelsea', leagues: ['england']},
+                away: {name: 'Burnley', leagues: ['england']},
+                league: 'england',
+                season: 2020
+            },
+            outcome: 'draw',
+            confidence: .53345,
+        })));
+
+        const page = render(<TestAppContext store={store}>
+            <ForecastResult/>
+        </TestAppContext>);
+
+        expect(await page.findByText('Confidence: 53%')).toBeTruthy();
+    });
+
+    test('loaded with confidence round up', async () => {
+        store.dispatch(forecastState.finishedLoading(result.ok({
+            fixture: {
+                home: {name: 'Chelsea', leagues: ['england']},
+                away: {name: 'Burnley', leagues: ['england']},
+                league: 'england',
+                season: 2020
+            },
+            outcome: 'draw',
+            confidence: .537,
+        })));
+
+        const page = render(<TestAppContext store={store}>
+            <ForecastResult/>
+        </TestAppContext>);
+
+        expect(await page.findByText('Confidence: 54%')).toBeTruthy();
+    });
+
     test('error', async () => {
         store.dispatch(forecastState.finishedLoading(result.err('There was a problem')));
 

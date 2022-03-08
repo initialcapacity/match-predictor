@@ -43,4 +43,36 @@ describe('ForecastApi', () => {
             outcome: 'home'
         });
     });
+
+    test('fetchFor with confidence', async () => {
+        server.use(
+            rest.get('/api/forecast', (req, res, ctx) => {
+                return res(ctx.json({
+                    fixture: {
+                        home_team: {name: 'Chelsea', leagues: ['england']},
+                        away_team: {name: 'Brighton', leagues: ['england']},
+                        league: 'england',
+                    },
+                    outcome: 'home',
+                    confidence: .43,
+                }));
+            })
+        );
+
+        const result = await forecastApi.fetchFor({
+            home: {name: 'Chelsea', leagues: ['england']},
+            away: {name: 'Brighton', leagues: ['england']},
+            league: 'england',
+        });
+
+        expect(result).toEqual({
+            fixture: {
+                home: {name: 'Chelsea', leagues: ['england']},
+                away: {name: 'Brighton', leagues: ['england']},
+                league: 'england'
+            },
+            outcome: 'home',
+            confidence: .43,
+        });
+    });
 });

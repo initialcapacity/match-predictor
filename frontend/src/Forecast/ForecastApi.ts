@@ -16,6 +16,9 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
                 }
             }),
             outcome: schemawax.literalUnion('home', 'away', 'draw')
+        },
+        optional: {
+            confidence: schemawax.number
         }
     }).andThen((json): Forecast => ({
         fixture: {
@@ -23,7 +26,8 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
             away: { name: json.fixture.away_team.name, leagues: [json.fixture.league]},
             league: json.fixture.league
         },
-        outcome: json.outcome
+        outcome: json.outcome,
+        confidence: json.confidence,
     }));
 
 const fetchFor = (fixture: Fixture): Promise<Forecast> => {
