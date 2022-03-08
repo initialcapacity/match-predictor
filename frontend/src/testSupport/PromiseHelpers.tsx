@@ -9,3 +9,5 @@ export const waitForPromise = async (promise: Promise<unknown>) => {
     } catch {
     }
 };
+
+export const waitForRefresh = async () => waitForPromise(Promise.resolve());

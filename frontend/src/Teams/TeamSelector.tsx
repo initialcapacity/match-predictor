@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {AppState} from '../App/StateStore';
 import {match} from 'ts-pattern';
-import {ReactElement, useMemo, useState} from 'react';
+import {ReactElement, useEffect, useMemo, useState} from 'react';
 import {Team, TeamList} from './TeamsState';
 import {Select} from '../Forms/Inputs';
 import {fixtureState} from './FixtureState';
@@ -17,6 +17,12 @@ const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement =
         () => props.teamList.teams.filter(t => t.leagues.includes(league)),
         [league]
     );
+
+    useEffect(() => {
+        if (!selectedTeam) {
+            setLeague('');
+        }
+    }, [selectedTeam]);
 
     const setTeam = (teamName: string) => {
         const team = teams.filter(t => t.name === teamName).pop();

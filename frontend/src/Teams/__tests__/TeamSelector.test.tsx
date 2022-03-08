@@ -6,6 +6,8 @@ import {AppState, stateStore} from '../../App/StateStore';
 import {teamsState} from '../TeamsState';
 import {result} from '../../Http/Result';
 import userEvent from '@testing-library/user-event';
+import {fixtureState} from '../FixtureState';
+import {waitForRefresh} from '../../testSupport/PromiseHelpers';
 
 describe('TeamSelector', () => {
     let store: Store<AppState>;
@@ -56,5 +58,20 @@ describe('TeamSelector', () => {
         userEvent.selectOptions(page.getByLabelText('name'), 'Roma');
 
         expect(store.getState().fixture.away).toEqual({name: 'Roma', leagues: ['italy']});
+    });
+
+    test('clear', async () => {
+        const page = render(<TestAppContext store={store}>
+            <TeamSelector side="home"/>
+        </TestAppContext>);
+
+        userEvent.selectOptions(page.getByLabelText('league'), 'italy');
+        userEvent.selectOptions(page.getByLabelText('name'), 'Roma');
+
+        store.dispatch(fixtureState.clear);
+
+        await waitForRefresh();
+
+        expect(page.queryByRole('option', {name: 'Roma'})).toBeNull();
     });
 });
