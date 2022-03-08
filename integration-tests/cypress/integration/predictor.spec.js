@@ -8,10 +8,10 @@ describe('match predictor', () => {
         cy.get('#home-team').select('Chelsea')
 
         cy.get('#away-league').select('italy 1')
-        cy.get('#away-team').select('AS Roma')
+        cy.get('#away-team').select('Bologna FC')
 
         cy.contains('Submit').click()
 
-        cy.contains('AWAY').should('exist')
+        cy.contains('HOME').should('exist')
     });
 });
