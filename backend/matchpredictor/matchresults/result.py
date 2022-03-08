@@ -6,14 +6,13 @@ from typing import Optional
 @dataclass(frozen=True)
 class Team(object):
     name: str
-    country: str
 
 
 @dataclass(frozen=True)
 class Fixture(object):
     home_team: Team
     away_team: Team
-    tier: Optional[int] = None
+    league: str
 
 
 class Outcome(str, Enum):

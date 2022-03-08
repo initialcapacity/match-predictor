@@ -30,9 +30,9 @@ def _load_results(data_file: str, country: str, result_filter: Callable[[Result]
 
 def row_to_result(row: Dict[str, str], country: str) -> Result:
     fixture = Fixture(
-        home_team=Team(row['home'], country),
-        away_team=Team(row['visitor'], country),
-        tier=int(row['tier']),
+        home_team=Team(row['home']),
+        away_team=Team(row['visitor']),
+        league=f"{country} {row['tier']}"
     )
 
     home_goals = int(row['hgoal'])

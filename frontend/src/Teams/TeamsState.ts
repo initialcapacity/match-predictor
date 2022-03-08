@@ -6,12 +6,12 @@ import {Result} from '../Http/Result';
 
 export interface Team {
     name: string;
-    country: string;
+    leagues: string[];
 }
 
 export interface TeamList {
     teams: Team[];
-    countries: string[];
+    leagues: string[];
 }
 
 export type TeamsState = {
@@ -47,7 +47,7 @@ const reducer: Reducer<TeamsState, Action> = (state = initialState, action: Acti
                 return {
                     data: remoteData.loaded({
                         teams: value.data,
-                        countries: Array.from(new Set(value.data.map(t => t.country)))
+                        leagues: Array.from(new Set(value.data.flatMap(t => t.leagues))).sort()
                     })
                 };
             } else {

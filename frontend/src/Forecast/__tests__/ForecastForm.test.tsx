@@ -16,13 +16,13 @@ jest.mock('../../Teams/TeamsApi');
 
 describe('ForecastForm', () => {
     let store: Store<AppState>;
-    const chelsea = {name: 'Chelsea', country: 'england'};
-    const burnley = {name: 'Burnley', country: 'england'};
+    const chelsea = {name: 'Chelsea', leagues: ['england']};
+    const burnley = {name: 'Burnley', leagues: ['england']};
 
     const teams: Team[] = [
         chelsea,
         burnley,
-        {name: 'Rangers', country: 'scotland'},
+        {name: 'Rangers', leagues: ['scotland']},
     ];
     const mockTeamsResponse = Promise.resolve(teams);
 
@@ -45,7 +45,7 @@ describe('ForecastForm', () => {
         expect(teamList.type).toEqual('loaded');
         if (teamList.type === 'loaded') {
             expect(teamList.value).toEqual({
-                countries: ['england', 'scotland'],
+                leagues: ['england', 'scotland'],
                 teams
             });
         }
@@ -72,7 +72,7 @@ describe('ForecastForm', () => {
         store.dispatch(fixtureState.setAway(burnley));
 
         const forecast: Forecast = {
-            fixture: {home: chelsea, away: burnley},
+            fixture: {home: chelsea, away: burnley, league: 'england'},
             outcome: 'home'
         };
 

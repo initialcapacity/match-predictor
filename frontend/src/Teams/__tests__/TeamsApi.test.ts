@@ -4,7 +4,7 @@ import {teamsApi} from '../TeamsApi';
 
 const server = setupServer();
 
-describe('ForecastApi', () => {
+describe('TeamsApi', () => {
     beforeAll(() => server.listen());
     afterEach(() => server.resetHandlers());
     afterAll(() => server.close());
@@ -13,13 +13,13 @@ describe('ForecastApi', () => {
         server.use(
             rest.get('/api/teams', (req, res, ctx) => {
                 return res(ctx.json({
-                    teams: [{name: 'Chelsea', country: 'england'}, {name: 'AS Roma', country: 'italy'}],
+                    teams: [{name: 'Chelsea', leagues: ['england']}, {name: 'AS Roma', leagues: ['italy']}],
                 }));
             })
         );
 
         const result = await teamsApi.fetch();
 
-        expect(result).toEqual([{name: 'Chelsea', country: 'england'}, {name: 'AS Roma', country: 'italy'}]);
+        expect(result).toEqual([{name: 'Chelsea', leagues: ['england']}, {name: 'AS Roma', leagues: ['italy']}]);
     });
 });

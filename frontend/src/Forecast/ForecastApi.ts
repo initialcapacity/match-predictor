@@ -2,9 +2,8 @@ import {Forecast} from './ForecastState';
 import * as schemawax from 'schemawax';
 import {http} from '../Http/Http';
 import {Fixture} from '../Teams/FixtureState';
-import {Team} from '../Teams/TeamsState';
 
-const teamDecoder: schemawax.Decoder<Team> = schemawax.object({required: {name: schemawax.string, country: schemawax.string}});
+const teamDecoder: schemawax.Decoder<{ name: string }> = schemawax.object({required: {name: schemawax.string}});
 
 const forecastDecoder: schemawax.Decoder<Forecast> =
     schemawax.object({
@@ -13,14 +12,16 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
                 required: {
                     home_team: teamDecoder,
                     away_team: teamDecoder,
+                    league: schemawax.string,
                 }
             }),
             outcome: schemawax.literalUnion('home', 'away', 'draw')
         }
     }).andThen((json): Forecast => ({
         fixture: {
-            home: json.fixture.home_team,
-            away: json.fixture.away_team,
+            home: { name: json.fixture.home_team.name, leagues: [json.fixture.league]},
+            away: { name: json.fixture.away_team.name, leagues: [json.fixture.league]},
+            league: json.fixture.league
         },
         outcome: json.outcome
     }));
@@ -28,9 +29,8 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
 const fetchFor = (fixture: Fixture): Promise<Forecast> => {
     const params = new URLSearchParams({
         home_name: fixture.home.name,
-        home_country: fixture.home.country,
         away_name: fixture.away.name,
-        away_country: fixture.away.country,
+        league: fixture.league,
     });
 
     return http.sendRequest(`/api/forecast?${params}`, forecastDecoder);

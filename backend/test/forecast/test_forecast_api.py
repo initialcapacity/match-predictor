@@ -10,14 +10,14 @@ class TestForecastApi(TestCase):
 
     def test_forecast(self) -> None:
         response = self.test_client.get(
-            '/forecast?home_name=Everton&home_country=england&away_name=Burnley&away_country=england'
+            '/forecast?home_name=Everton&away_name=Burnley&league=england%201'
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json(), {
             'fixture': {
-                'away_team': {'name': 'Burnley', 'country': 'england'},
-                'home_team': {'name': 'Everton', 'country': 'england'},
-                'tier': None
+                'away_team': {'name': 'Burnley'},
+                'home_team': {'name': 'Everton'},
+                'league': 'england 1'
             },
             'outcome': 'home'})

@@ -15,10 +15,11 @@ class Forecaster:
     def __init__(self, predictor: Predictor) -> None:
         self.predictor = predictor
 
-    def forecast(self, home_team: Team, away_team: Team) -> Optional[Forecast]:
+    def forecast(self, home_team: Team, away_team: Team, league: str) -> Optional[Forecast]:
         fixture = Fixture(
             home_team=home_team,
             away_team=away_team,
+            league=league,
         )
 
         outcome = self.predictor.predict(fixture)

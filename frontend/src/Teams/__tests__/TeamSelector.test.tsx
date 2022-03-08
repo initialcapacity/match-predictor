@@ -14,8 +14,8 @@ describe('TeamSelector', () => {
         store = stateStore.create();
 
         store.dispatch(teamsState.finishedLoading(result.ok([
-            {name: 'Chelsea', country: 'england'},
-            {name: 'Roma', country: 'italy'},
+            {name: 'Chelsea', leagues: ['england']},
+            {name: 'Roma', leagues: ['italy']},
         ])));
     });
 
@@ -27,11 +27,11 @@ describe('TeamSelector', () => {
         expect(page.queryByRole('option', {name: 'Chelsea'})).toBeNull();
         expect(page.queryByRole('option', {name: 'Roma'})).toBeNull();
 
-        userEvent.selectOptions(page.getByLabelText('country'), 'england');
+        userEvent.selectOptions(page.getByLabelText('league'), 'england');
         expect(page.queryByRole('option', {name: 'Chelsea'})).toBeVisible();
         expect(page.queryByRole('option', {name: 'Roma'})).toBeNull();
 
-        userEvent.selectOptions(page.getByLabelText('country'), 'italy');
+        userEvent.selectOptions(page.getByLabelText('league'), 'italy');
         expect(page.queryByRole('option', {name: 'Chelsea'})).toBeNull();
         expect(page.queryByRole('option', {name: 'Roma'})).toBeVisible();
     });
@@ -41,10 +41,10 @@ describe('TeamSelector', () => {
             <TeamSelector side="home"/>
         </TestAppContext>);
 
-        userEvent.selectOptions(page.getByLabelText('country'), 'england');
+        userEvent.selectOptions(page.getByLabelText('league'), 'england');
         userEvent.selectOptions(page.getByLabelText('name'), 'Chelsea');
 
-        expect(store.getState().fixture.home).toEqual({name: 'Chelsea', country: 'england'});
+        expect(store.getState().fixture.home).toEqual({name: 'Chelsea', leagues: ['england']});
     });
 
     test('pick away', () => {
@@ -52,9 +52,9 @@ describe('TeamSelector', () => {
             <TeamSelector side="away"/>
         </TestAppContext>);
 
-        userEvent.selectOptions(page.getByLabelText('country'), 'italy');
+        userEvent.selectOptions(page.getByLabelText('league'), 'italy');
         userEvent.selectOptions(page.getByLabelText('name'), 'Roma');
 
-        expect(store.getState().fixture.away).toEqual({name: 'Roma', country: 'italy'});
+        expect(store.getState().fixture.away).toEqual({name: 'Roma', leagues: ['italy']});
     });
 });

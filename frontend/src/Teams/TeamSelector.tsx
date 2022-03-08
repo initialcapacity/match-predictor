@@ -11,11 +11,11 @@ type Side = 'home' | 'away'
 const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement => {
     const dispatch = useDispatch();
     const selectedTeam = useSelector((app: AppState) => app.fixture[props.side]);
-    const [country, setCountry] = useState<string>('');
+    const [league, setLeague] = useState<string>('');
 
     const teams = useMemo<Team[]>(
-        () => props.teamList.teams.filter(t => t.country === country),
-        [country]
+        () => props.teamList.teams.filter(t => t.leagues.includes(league)),
+        [league]
     );
 
     const setTeam = (teamName: string) => {
@@ -33,11 +33,11 @@ const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement =
         <fieldset>
             <legend>{props.side}</legend>
             <Select
-                id={props.side + '-country'}
-                label={'country'}
-                value={country}
-                onChange={country => setCountry(country)}
-                options={props.teamList.countries}
+                id={props.side + '-league'}
+                label={'league'}
+                value={league}
+                onChange={league => setLeague(league)}
+                options={props.teamList.leagues}
             />
             <Select
                 id={props.side + '-team'}

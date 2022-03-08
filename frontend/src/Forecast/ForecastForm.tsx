@@ -1,4 +1,4 @@
-import {FormEvent, ReactElement, useEffect, useState} from 'react';
+import {FormEvent, ReactElement, useEffect} from 'react';
 import {forecastState} from './ForecastState';
 import {useDispatch, useSelector} from 'react-redux';
 import {forecastApi} from './ForecastApi';

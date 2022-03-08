@@ -8,7 +8,7 @@ const teamsDecoder: schemawax.Decoder<Team[]> =
             teams: schemawax.array(schemawax.object({
                 required: {
                     name: schemawax.string,
-                    country: schemawax.string,
+                    leagues: schemawax.array(schemawax.string),
                 }
             }))
         }

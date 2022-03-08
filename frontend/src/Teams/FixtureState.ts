@@ -5,6 +5,7 @@ import {Team} from './TeamsState';
 export type Fixture = {
     home: Team,
     away: Team,
+    league: string,
 }
 
 export type FixtureState = Partial<Fixture>
