@@ -6,6 +6,6 @@ module.exports = {
         '\\.css$': '<rootDir>/src/testSupport/AssetStubs.js',
         '\\.svg$': '<rootDir>/src/testSupport/AssetStubs.js',
     },
-    globals: {'ts-jest': {useESM: true}},
+    globals: {'ts-jest': {useESM: true, isolatedModules: true}},
     setupFilesAfterEnv: ['<rootDir>/src/testSupport/GlobalHelpers.js']
 };
