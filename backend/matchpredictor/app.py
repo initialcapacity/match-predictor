@@ -11,18 +11,14 @@ from matchpredictor.teams.teams_provider import TeamsProvider
 
 app = Flask(__name__)
 
-season = 2020
+season = 2022
 
 
 def last_two_years(result: Result) -> bool:
     return result.season >= season - 2
 
 
-england_training_data = training_results('england', season, last_two_years)
-italy_training_data = training_results('italy', season, last_two_years)
-germany_training_data = training_results('germany', season, last_two_years)
-
-results = england_training_data + italy_training_data + germany_training_data
+results = training_results("spi_matches", season, last_two_years)
 fixtures = list(map(lambda r: r.fixture, results))
 
 teams_provider = TeamsProvider(fixtures)

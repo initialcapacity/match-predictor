@@ -15,7 +15,13 @@ class TestTeamsApi(TestCase):
         self.assertEqual(response.status_code, 200)
         teams = cast(Dict[str, Any], response.get_json())["teams"]
         self.assertIsNotNone(teams)
-        self.assertTrue({'name': 'Chelsea', 'leagues': ['england 1']} in teams, "Chelsea should be in teams")
-        self.assertTrue({'name': 'AS Roma', 'leagues': ['italy 1']} in teams, "Roma should be in teams")
-        self.assertTrue({'name': 'VfL Wolfsburg', 'leagues': ['germany 1']} in teams, "Wolfsburg should be in teams")
+
+        self.assertTrue({'name': 'Chelsea', 'leagues': ['Barclays Premier League', 'UEFA Champions League']} in teams,
+                        'Chelsea should be in teams')
+        self.assertTrue({'name': 'AS Roma',
+                         'leagues': ['Italy Serie A', 'UEFA Europa Conference League', 'UEFA Europa League']} in teams,
+                        "Roma should be in teams")
+        self.assertTrue({'name': 'VfL Wolfsburg', 'leagues': ['German Bundesliga', 'UEFA Champions League']} in teams,
+                        "Wolfsburg should be in teams")
+
         self.assertGreater(len(teams), 100, "there likely aren't enough teams")

@@ -1,13 +1,13 @@
 from unittest import TestCase
 
 from matchpredictor.matchresults.result import Result, Fixture, Team, Outcome
-from matchpredictor.matchresults.results_provider import load_five_thirty_eight_spi_results
+from matchpredictor.matchresults.results_provider import load_results
 
 
 class TestResultsProvider(TestCase):
 
     def test_load_five_thirty_eight_spi_results(self) -> None:
-        results = load_five_thirty_eight_spi_results('spi_matches_sample', 2020)
+        results = load_results('spi_matches_sample', lambda r: r.season < 2020)
 
         expected_first_result = Result(
             fixture=Fixture(
@@ -27,5 +27,5 @@ class TestResultsProvider(TestCase):
         self.assertEqual(Outcome.DRAW, results[2].outcome)
 
     def test_load_five_thirty_eight_spi_results__with_the_full_data_set(self) -> None:
-        results = load_five_thirty_eight_spi_results('spi_matches', 2030)
-        self.assertEqual(52119, len(results))
+        results = load_results('spi_matches', lambda r: True)
+        self.assertEqual(52120, len(results))

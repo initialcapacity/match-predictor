@@ -1,5 +1,5 @@
-from matchpredictor.country_predictor_report import predictor_report_for
+from matchpredictor.league_predictor_report import predictor_report_for
 
-predictor_report_for('england', 2019)
-predictor_report_for('italy', 2019)
-predictor_report_for('france', 2018)
+predictor_report_for('Barclays Premier League', 2021)
+predictor_report_for('English League Championship', 2021)
+predictor_report_for('Italy Serie A', 2021)

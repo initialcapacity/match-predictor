@@ -10,7 +10,7 @@ class TestForecastApi(TestCase):
 
     def test_forecast(self) -> None:
         response = self.test_client.get(
-            '/forecast?home_name=Always+Wins&away_name=Always+Loses&league=italy+1'
+            '/forecast?home_name=Always+Wins&away_name=Always+Loses&league=Test+League'
         )
 
         self.assertEqual(response.status_code, 200)
@@ -18,7 +18,7 @@ class TestForecastApi(TestCase):
             'fixture': {
                 'away_team': {'name': 'Always Loses'},
                 'home_team': {'name': 'Always Wins'},
-                'league': 'italy 1'
+                'league': 'Test League'
             },
             'outcome': 'home',
             'confidence': 1
