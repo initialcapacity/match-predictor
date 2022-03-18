@@ -26,6 +26,12 @@ backend/test: backend/types
 	source env/bin/activate; \
 	python -m unittest; \
 
+.PHONY: backend/measure
+backend/measure:
+	cd backend; \
+	source env/bin/activate; \
+	python -m unittest discover -p "measure_*.py"; \
+
 .PHONY: backend/report
 backend/report:
 	cd backend; \
@@ -69,5 +75,9 @@ integration/run:
 .PHONY: install
 install: backend/install frontend/install integration/install
 
+.PHONY: unittest
+unittest: backend/test frontend/test
+
 .PHONY: test
-test: backend/test frontend/test integration/test
+test: unittest integration/test
+
