@@ -3,15 +3,16 @@ from unittest import TestCase
 from matchpredictor.evaluation.evaluator import Evaluator
 from matchpredictor.matchresults.result import Team, Fixture, Outcome, Result
 from matchpredictor.matchresults.results_provider import training_results, validation_results
-from matchpredictor.predictors.scoring_rate_predictor import train_scoring_predictor, ScoringRatePredictor
-from matchpredictor.predictors.scoring_rates import ScoringRates
+from matchpredictor.predictors.simulation_predictor import train_offense_predictor, SimulationPredictor
+from matchpredictor.predictors.simulators.scoring_rates import ScoringRates
+from matchpredictor.predictors.simulators.simulator import offense_simulator
 
 
 class TestScoringRatePredictor(TestCase):
     def test_accuracy_last_two_seasons(self) -> None:
         training_data = training_results('spi_matches', 2019, result_filter=lambda result: result.season >= 2017)
         validation_data = validation_results('spi_matches', 2019)
-        predictor = train_scoring_predictor(training_data, 50)
+        predictor = train_offense_predictor(training_data, 50)
 
         accuracy, _ = Evaluator(predictor).measure_accuracy(validation_data)
 
@@ -28,7 +29,7 @@ class TestScoringRatePredictor(TestCase):
             )
         ])
 
-        predictor = ScoringRatePredictor(scoring_rates=scoring_rates, simulations=1)
+        predictor = SimulationPredictor(simulator=offense_simulator(scoring_rates), simulations=1)
 
         outcome, confidence = predictor.predict(Fixture(
             home_team=Team('Always Wins'),

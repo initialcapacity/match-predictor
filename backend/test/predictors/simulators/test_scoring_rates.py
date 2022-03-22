@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from matchpredictor.matchresults.result import Result, Fixture, Team, Outcome
-from matchpredictor.predictors.scoring_rates import ScoringRates
+from matchpredictor.predictors.simulators.scoring_rates import ScoringRates
 
 
 class TestScoringRates(TestCase):

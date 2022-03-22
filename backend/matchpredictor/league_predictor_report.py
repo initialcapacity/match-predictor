@@ -3,9 +3,9 @@ from matchpredictor.matchresults.result import Result
 from matchpredictor.matchresults.results_provider import training_results, validation_results
 from matchpredictor.predictors.home_predictor import HomePredictor
 from matchpredictor.predictors.linear_regression_predictor import train_regression_predictor
-from matchpredictor.predictors.enhanced_scoring_predictor import train_enhanced_scoring_predictor
 from matchpredictor.predictors.past_results_predictor import train_results_predictor
-from matchpredictor.predictors.scoring_rate_predictor import train_scoring_predictor
+from matchpredictor.predictors.simulation_predictor import train_offense_predictor, \
+    train_offense_and_defense_predictor
 
 
 def predictor_report_for(league: str, year: int) -> None:
@@ -21,8 +21,8 @@ def predictor_report_for(league: str, year: int) -> None:
         validation_data,
         [LabeledPredictor("home", HomePredictor()),
          LabeledPredictor("points", train_results_predictor(training_data)),
-         LabeledPredictor("scoring coarse", train_scoring_predictor(training_data, 30)),
-         LabeledPredictor("scoring", train_scoring_predictor(training_data, 300)),
-         LabeledPredictor("enhanced scoring", train_enhanced_scoring_predictor(training_data, 300)),
+         LabeledPredictor("scoring coarse", train_offense_predictor(training_data, 30)),
+         LabeledPredictor("scoring", train_offense_predictor(training_data, 300)),
+         LabeledPredictor("enhanced scoring", train_offense_and_defense_predictor(training_data, 300)),
          LabeledPredictor("linear regression", train_regression_predictor(training_data)), ]
     ).run_report()
