@@ -1,10 +1,10 @@
 from unittest import TestCase
 
 from matchpredictor.evaluation.evaluator import Evaluator
-from matchpredictor.matchresults.result import Team, Fixture, Outcome
+from matchpredictor.matchresults.result import Team, Fixture, Outcome, Result
 from matchpredictor.matchresults.results_provider import training_results, validation_results
-from matchpredictor.predictors.scoring_rate_predictor import train_scoring_predictor, ScoringRatePredictor, TeamScoring, \
-    ScoringRates
+from matchpredictor.predictors.scoring_rate_predictor import train_scoring_predictor, ScoringRatePredictor
+from matchpredictor.predictors.scoring_rates import ScoringRates
 
 
 class TestScoringRatePredictor(TestCase):
@@ -18,9 +18,15 @@ class TestScoringRatePredictor(TestCase):
         self.assertGreaterEqual(accuracy, .33)
 
     def test_confidence(self) -> None:
-        scoring_rates = ScoringRates()
-        scoring_rates.add_match(Team('Always Wins'), 90)
-        scoring_rates.add_match(Team('Always Loses'), 0)
+        scoring_rates = ScoringRates([
+            Result(
+                fixture=Fixture(Team('Always Wins'), Team('Always Loses'), 'Some league'),
+                outcome=Outcome.HOME,
+                home_goals=90,
+                away_goals=0,
+                season=1999,
+            )
+        ])
 
         predictor = ScoringRatePredictor(scoring_rates=scoring_rates, simulations=1)
 

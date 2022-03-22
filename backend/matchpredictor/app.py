@@ -5,7 +5,7 @@ from matchpredictor.forecast.forecaster import Forecaster
 from matchpredictor.health import health_api
 from matchpredictor.matchresults.result import Result
 from matchpredictor.matchresults.results_provider import training_results
-from matchpredictor.predictors.scoring_rate_predictor import train_scoring_predictor
+from matchpredictor.predictors.enhanced_scoring_predictor import train_enhanced_scoring_predictor
 from matchpredictor.teams.teams_api import teams_api
 from matchpredictor.teams.teams_provider import TeamsProvider
 
@@ -22,7 +22,7 @@ results = training_results("spi_matches", season, last_two_years)
 fixtures = list(map(lambda r: r.fixture, results))
 
 teams_provider = TeamsProvider(fixtures)
-predictor = train_scoring_predictor(results, 300)
+predictor = train_enhanced_scoring_predictor(results, 300)
 forecaster = Forecaster(predictor)
 
 app.register_blueprint(forecast_api(forecaster))
