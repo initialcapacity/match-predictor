@@ -23,9 +23,9 @@ class Forecaster:
             league=league,
         )
 
-        outcome, confidence = self.predictor.predict(fixture)
+        prediction = self.predictor(fixture)
 
-        if outcome is None:
+        if prediction.outcome is None:
             return None
 
-        return Forecast(fixture=fixture, outcome=outcome, confidence=confidence)
+        return Forecast(fixture=fixture, outcome=prediction.outcome, confidence=prediction.confidence)

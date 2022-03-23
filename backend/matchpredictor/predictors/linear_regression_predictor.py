@@ -7,41 +7,37 @@ from sklearn.linear_model import LogisticRegression  # type: ignore
 from sklearn.preprocessing import OneHotEncoder  # type: ignore
 
 from matchpredictor.matchresults.result import Fixture, Outcome, Result, Team
-from matchpredictor.predictors.predictor import Predictor
+from matchpredictor.predictors.predictor import Predictor, Prediction
 
 
-class LinearRegressionPredictor(Predictor):
-    team_encoding: OneHotEncoder
-    model: LogisticRegression
+def linear_regression_predictor(model: LogisticRegression, team_encoding: OneHotEncoder) -> Predictor:
 
-    def __init__(self, model: LogisticRegression, team_encoding: OneHotEncoder):
-        self.model = model
-        self.team_encoding = team_encoding
-
-    def predict(self, fixture: Fixture) -> Tuple[Outcome, Optional[float]]:
-        encoded_home_name = self.__encode_team(fixture.home_team)
-        encoded_away_name = self.__encode_team(fixture.away_team)
+    def predict(fixture: Fixture) -> Prediction:
+        encoded_home_name = encode_team(fixture.home_team)
+        encoded_away_name = encode_team(fixture.away_team)
 
         if encoded_home_name is None:
-            return Outcome.AWAY, None
+            return Prediction(outcome=Outcome.AWAY)
         if encoded_away_name is None:
-            return Outcome.HOME, None
+            return Prediction(outcome=Outcome.HOME)
 
         x: NDArray[float64] = np.concatenate([encoded_home_name, encoded_away_name], 1)  # type: ignore
-        pred = self.model.predict(x)
+        pred = model.predict(x)
 
         if pred > 0:
-            return Outcome.HOME, None
+            return Prediction(outcome=Outcome.HOME)
         elif pred < 0:
-            return Outcome.AWAY, None
+            return Prediction(outcome=Outcome.AWAY)
         else:
-            return Outcome.DRAW, None
+            return Prediction(outcome=Outcome.DRAW)
 
-    def __encode_team(self, team: Team) -> Optional[NDArray[float64]]:
+    def encode_team(team: Team) -> Optional[NDArray[float64]]:
         try:
-            return self.team_encoding.transform(np.array(team.name).reshape(-1, 1))  # type: ignore
+            return team_encoding.transform(np.array(team.name).reshape(-1, 1))  # type: ignore
         except ValueError:
             return None
+
+    return predict
 
 
 def build_model(results: List[Result]) -> Tuple[LogisticRegression, OneHotEncoder]:
@@ -65,7 +61,7 @@ def build_model(results: List[Result]) -> Tuple[LogisticRegression, OneHotEncode
     return model, team_encoding
 
 
-def train_regression_predictor(results: List[Result]) -> LinearRegressionPredictor:
+def train_regression_predictor(results: List[Result]) -> Predictor:
     model, team_encoding = build_model(results)
 
-    return LinearRegressionPredictor(model, team_encoding)
+    return linear_regression_predictor(model, team_encoding)

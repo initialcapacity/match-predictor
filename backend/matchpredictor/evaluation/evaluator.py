@@ -19,5 +19,5 @@ class Evaluator(object):
         return correct_predictions / len(results), time_elapsed
 
     def __is_correct(self, result: Result) -> bool:
-        outcome, _ = self.predictor.predict(result.fixture)
-        return outcome == result.outcome
+        prediction = self.predictor(result.fixture)
+        return prediction.outcome == result.outcome

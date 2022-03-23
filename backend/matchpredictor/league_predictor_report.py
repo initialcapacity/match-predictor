@@ -1,7 +1,7 @@
 from matchpredictor.evaluation.reporter import Reporter, LabeledPredictor
 from matchpredictor.matchresults.result import Result
 from matchpredictor.matchresults.results_provider import training_results, validation_results
-from matchpredictor.predictors.home_predictor import HomePredictor
+from matchpredictor.predictors.home_predictor import home_predictor
 from matchpredictor.predictors.linear_regression_predictor import train_regression_predictor
 from matchpredictor.predictors.past_results_predictor import train_results_predictor
 from matchpredictor.predictors.simulation_predictor import train_offense_predictor, \
@@ -19,7 +19,7 @@ def predictor_report_for(league: str, year: int) -> None:
     Reporter(
         f"{league} {year}",
         validation_data,
-        [LabeledPredictor("home", HomePredictor()),
+        [LabeledPredictor("home", home_predictor),
          LabeledPredictor("points", train_results_predictor(training_data)),
          LabeledPredictor("scoring coarse", train_offense_predictor(training_data, 30)),
          LabeledPredictor("scoring", train_offense_predictor(training_data, 300)),

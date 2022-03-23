@@ -1,10 +1,13 @@
-from abc import ABC, abstractmethod
-from typing import Optional, Tuple
+from dataclasses import dataclass
+from typing import Optional, TypeAlias, Callable
 
 from matchpredictor.matchresults.result import Fixture, Outcome
 
 
-class Predictor(ABC):
-    @abstractmethod
-    def predict(self, fixture: Fixture) -> Tuple[Outcome, Optional[float]]:
-        pass
+@dataclass
+class Prediction:
+    outcome: Outcome
+    confidence: Optional[float] = None
+
+
+Predictor: TypeAlias = Callable[[Fixture], Prediction]

@@ -1,7 +1,7 @@
-from typing import Iterable, Dict, Optional, Tuple
+from typing import Iterable, Dict
 
-from matchpredictor.predictors.predictor import Predictor
 from matchpredictor.matchresults.result import Outcome, Fixture, Result, Team
+from matchpredictor.predictors.predictor import Predictor, Prediction
 
 
 class PointsTable:
@@ -22,20 +22,20 @@ class PointsTable:
         self.points_dict[team.name] = previous_points + points
 
 
-class PastResultsPredictor(Predictor):
-    def __init__(self, table: PointsTable):
-        self.table = table
+def past_results_predictor(table: PointsTable) -> Predictor:
 
-    def predict(self, fixture: Fixture) -> Tuple[Outcome, Optional[float]]:
-        home_points = self.table.points_for(fixture.home_team)
-        away_points = self.table.points_for(fixture.away_team)
+    def predict(fixture: Fixture) -> Prediction:
+        home_points = table.points_for(fixture.home_team)
+        away_points = table.points_for(fixture.away_team)
 
         if home_points > away_points:
-            return Outcome.HOME, None
+            return Prediction(Outcome.HOME)
         elif home_points < away_points:
-            return Outcome.AWAY, None
+            return Prediction(Outcome.AWAY)
         else:
-            return Outcome.DRAW, None
+            return Prediction(Outcome.DRAW)
+
+    return predict
 
 
 def calculate_table(results: Iterable[Result]) -> PointsTable:
@@ -53,5 +53,5 @@ def calculate_table(results: Iterable[Result]) -> PointsTable:
     return table
 
 
-def train_results_predictor(results: Iterable[Result]) -> PastResultsPredictor:
-    return PastResultsPredictor(calculate_table(results))
+def train_results_predictor(results: Iterable[Result]) -> Predictor:
+    return past_results_predictor(calculate_table(results))
