@@ -1,7 +1,8 @@
 import csv
-import pathlib
-from os import path
+from io import StringIO
 from typing import Dict, Callable, List, Optional, cast
+
+import requests
 
 from matchpredictor.matchresults.result import Result, Fixture, Team, Outcome
 
@@ -26,8 +27,6 @@ def load_results(
         file_name: str,
         result_filter: Callable[[Result], bool] = lambda result: True,
 ) -> List[Result]:
-    backend_folder = pathlib.Path(__file__).parent.parent.parent
-    file_path = path.join(backend_folder, 'data', f'{file_name}.csv')
 
     def match_outcome(home_goals: int, away_goals: int) -> Outcome:
         if home_goals > away_goals:
@@ -55,8 +54,15 @@ def load_results(
         except ValueError:
             return None
 
-    with open(file_path) as training_data:
-        rows = csv.DictReader(training_data)
-        results = filter(lambda r: type(r) is Result and result_filter(r), map(result_from_row, rows))
+    response = requests.request(
+        method='GET',
+        url=f'https://projects.fivethirtyeight.com/soccer-api/club/{file_name}.csv'
+    )
 
-        return cast(List[Result], list(results))
+    csv_file_content = response.content.decode('utf-8')
+
+    rows = csv.DictReader(StringIO(csv_file_content))
+    maybe_results = map(result_from_row, rows)
+    filtered_results = filter(lambda r: type(r) is Result and result_filter(r), maybe_results)
+
+    return cast(List[Result], list(filtered_results))
