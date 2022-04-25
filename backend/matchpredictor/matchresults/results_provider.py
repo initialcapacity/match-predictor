@@ -28,17 +28,20 @@ def load_results(
         result_filter: Callable[[Result], bool] = lambda result: True,
 ) -> List[Result]:
 
-    def match_outcome(home_goals: int, away_goals: int) -> Outcome:
-        if home_goals > away_goals:
-            return Outcome.HOME
+    def game_outcome(away_goals: int, home_goals: int) -> Outcome:
+        outcome = Outcome.DRAW
+
         if away_goals > home_goals:
-            return Outcome.AWAY
-        return Outcome.DRAW
+            outcome = Outcome.AWAY
+        if home_goals > away_goals:
+            outcome = Outcome.HOME
+
+        return outcome
 
     def result_from_row(row: Dict[str, str]) -> Optional[Result]:
         try:
-            home_goals = int(row['score1'])
             away_goals = int(row['score2'])
+            home_goals = int(row['score1'])
 
             return Result(
                 fixture=Fixture(
@@ -46,23 +49,31 @@ def load_results(
                     away_team=Team(row['team2']),
                     league=row['league']
                 ),
-                outcome=match_outcome(home_goals, away_goals),
+                outcome=game_outcome(away_goals, home_goals),
                 home_goals=home_goals,
                 away_goals=away_goals,
-                season=int(row['season'])
+                season=int(row['season']),
             )
-        except ValueError:
+        except (TypeError, AttributeError, ValueError):
             return None
+
+    def apply_filter(maybe_result: Optional[Result]) -> bool:
+        if maybe_result is None:
+            return False
+
+        return result_filter(maybe_result)
 
     response = requests.request(
         method='GET',
         url=f'https://projects.fivethirtyeight.com/soccer-api/club/{file_name}.csv'
     )
 
+    if response.status_code != 200:
+        raise Exception(f'Expected response status code of 200, got {response.status_code} instead')
+
     csv_file_content = response.content.decode('utf-8')
-
     rows = csv.DictReader(StringIO(csv_file_content))
-    maybe_results = map(result_from_row, rows)
-    filtered_results = filter(lambda r: type(r) is Result and result_filter(r), maybe_results)
+    results = map(result_from_row, rows)
+    results_filter = filter(apply_filter, results)
 
-    return cast(List[Result], list(filtered_results))
+    return cast(List[Result], list(results_filter))

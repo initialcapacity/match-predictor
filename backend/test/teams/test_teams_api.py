@@ -1,13 +1,13 @@
 from typing import Dict, cast, Any
 from unittest import TestCase
 
-from matchpredictor.app import app
+from matchpredictor.app import create_app
 
 
 class TestTeamsApi(TestCase):
     def setUp(self) -> None:
         super().setUp()
-        self.test_client = app.test_client()
+        self.test_client = create_app().test_client()
 
     def test_list_teams(self) -> None:
         response = self.test_client.get('/teams')
