@@ -1,34 +1,31 @@
 import csv
-import pathlib
-from os import path
 from typing import Dict, Callable, List, Optional, cast
+
+import requests
 
 from matchpredictor.matchresults.result import Result, Fixture, Team, Outcome
 
 
 def training_results(
-        file_name: str,
+        csv_location: str,
         year: int,
         result_filter: Callable[[Result], bool] = lambda result: True,
 ) -> List[Result]:
-    return load_results(file_name, lambda r: result_filter(r) and r.season < year)
+    return load_results(csv_location, lambda r: result_filter(r) and r.season < year)
 
 
 def validation_results(
-        file_name: str,
+        csv_location: str,
         year: int,
         result_filter: Callable[[Result], bool] = lambda result: True
 ) -> List[Result]:
-    return load_results(file_name, lambda r: result_filter(r) and r.season == year)
+    return load_results(csv_location, lambda r: result_filter(r) and r.season == year)
 
 
 def load_results(
-        file_name: str,
+        csv_location: str,
         result_filter: Callable[[Result], bool] = lambda result: True,
 ) -> List[Result]:
-    backend_folder = pathlib.Path(__file__).parent.parent.parent
-    file_path = path.join(backend_folder, 'data', f'{file_name}.csv')
-
     def match_outcome(home_goals: int, away_goals: int) -> Outcome:
         if home_goals > away_goals:
             return Outcome.HOME
@@ -52,11 +49,12 @@ def load_results(
                 away_goals=away_goals,
                 season=int(row['season'])
             )
-        except ValueError:
+        except (KeyError, ValueError):
             return None
 
-    with open(file_path) as training_data:
-        rows = csv.DictReader(training_data)
-        results = filter(lambda r: type(r) is Result and result_filter(r), map(result_from_row, rows))
+    training_data = requests.get(csv_location).text
 
-        return cast(List[Result], list(results))
+    rows = csv.DictReader(training_data.splitlines())
+    results = filter(lambda r: type(r) is Result and result_filter(r), map(result_from_row, rows))
+
+    return cast(List[Result], list(results))

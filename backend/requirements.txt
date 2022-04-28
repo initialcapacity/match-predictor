@@ -3,3 +3,6 @@ scikit-learn==1.0.2
 Flask==2.1.1
 mypy==0.941
 typing-extensions==4.1.1
+requests==2.27.1
+types-requests==2.27.22
+responses==0.20.0

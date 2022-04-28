@@ -12,9 +12,10 @@ def predictor_report_for(league: str, year: int) -> None:
     def matches_league(result: Result) -> bool:
         return result.fixture.league == league
 
-    training_data = training_results("spi_matches", year,
+    csv_location = 'https://projects.fivethirtyeight.com/soccer-api/club/spi_matches.csv'
+    training_data = training_results(csv_location, year,
                                      lambda result: result.season >= year - 3 and matches_league(result))
-    validation_data = validation_results("spi_matches", year, matches_league)
+    validation_data = validation_results(csv_location, year, matches_league)
 
     Reporter(
         f"{league} {year}",
