@@ -10,10 +10,8 @@ from matchpredictor.teams.teams_api import teams_api
 from matchpredictor.teams.teams_provider import TeamsProvider
 
 
-def create_app(csv_location: str) -> Flask:
+def create_app(csv_location: str, season: int) -> Flask:
     app = Flask(__name__)
-
-    season = 2023
 
     def last_two_years(result: Result) -> bool:
         return result.season >= season - 2

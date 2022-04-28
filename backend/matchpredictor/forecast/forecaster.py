@@ -25,7 +25,4 @@ class Forecaster:
 
         prediction = self.predictor(fixture)
 
-        if prediction.outcome is None:
-            return None
-
         return Forecast(fixture=fixture, outcome=prediction.outcome, confidence=prediction.confidence)
