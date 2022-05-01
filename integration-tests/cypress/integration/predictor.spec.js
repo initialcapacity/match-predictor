@@ -10,6 +10,8 @@ describe('match predictor', () => {
         cy.get('#away-league').select('Test League')
         cy.get('#away-team').select('Always Loses')
 
+        cy.get('#model-name').select('Full simulator')
+
         cy.contains('Submit').click()
 
         cy.contains('HOME').should('exist')

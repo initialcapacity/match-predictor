@@ -1,15 +1,13 @@
 import {render} from '@testing-library/react';
 import {TestAppContext} from '../../testSupport/TestAppContext';
-import TeamSelector from '../TeamSelector';
+import TeamPicker from '../TeamPicker';
 import {Store} from 'redux';
 import {AppState, stateStore} from '../../App/StateStore';
 import {teamsState} from '../TeamsState';
 import {result} from '../../Http/Result';
 import userEvent from '@testing-library/user-event';
-import {fixtureState} from '../FixtureState';
-import {waitForRefresh} from '../../testSupport/PromiseHelpers';
 
-describe('TeamSelector', () => {
+describe('TeamPicker', () => {
     let store: Store<AppState>;
 
     beforeEach(() => {
@@ -23,7 +21,7 @@ describe('TeamSelector', () => {
 
     test('filter', () => {
         const page = render(<TestAppContext store={store}>
-            <TeamSelector side="home"/>
+            <TeamPicker side="home"/>
         </TestAppContext>);
 
         expect(page.queryByRole('option', {name: 'Chelsea'})).toBeNull();
@@ -40,38 +38,23 @@ describe('TeamSelector', () => {
 
     test('pick home', () => {
         const page = render(<TestAppContext store={store}>
-            <TeamSelector side="home"/>
+            <TeamPicker side="home"/>
         </TestAppContext>);
 
         userEvent.selectOptions(page.getByLabelText('league'), 'england');
         userEvent.selectOptions(page.getByLabelText('name'), 'Chelsea');
 
-        expect(store.getState().fixture.home).toEqual({name: 'Chelsea', leagues: ['england']});
+        expect(store.getState().forecastRequest.home).toEqual({name: 'Chelsea', leagues: ['england']});
     });
 
     test('pick away', () => {
         const page = render(<TestAppContext store={store}>
-            <TeamSelector side="away"/>
+            <TeamPicker side="away"/>
         </TestAppContext>);
 
         userEvent.selectOptions(page.getByLabelText('league'), 'italy');
         userEvent.selectOptions(page.getByLabelText('name'), 'Roma');
 
-        expect(store.getState().fixture.away).toEqual({name: 'Roma', leagues: ['italy']});
-    });
-
-    test('clear', async () => {
-        const page = render(<TestAppContext store={store}>
-            <TeamSelector side="home"/>
-        </TestAppContext>);
-
-        userEvent.selectOptions(page.getByLabelText('league'), 'italy');
-        userEvent.selectOptions(page.getByLabelText('name'), 'Roma');
-
-        store.dispatch(fixtureState.clear);
-
-        await waitForRefresh();
-
-        expect(page.queryByRole('option', {name: 'Roma'})).toBeNull();
+        expect(store.getState().forecastRequest.away).toEqual({name: 'Roma', leagues: ['italy']});
     });
 });

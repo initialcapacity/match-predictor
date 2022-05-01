@@ -1,0 +1,19 @@
+GET http://localhost:5001/
+Accept: application/json
+
+###
+
+GET http://localhost:5001/teams
+Accept: application/json
+
+###
+
+GET http://localhost:5001/models
+Accept: application/json
+
+###
+
+GET http://localhost:5001/forecast?home_name=Chelsea&away_name=Burnley&league=Barclays+Premier+League&model_name=Full+simulator
+Accept: application/json
+
+###

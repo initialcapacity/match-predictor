@@ -16,11 +16,13 @@ describe('ForecastApi', () => {
                 receivedSearchParams = req.url.searchParams;
                 return res(ctx.json({
                     fixture: {
-                        home_team: {name: 'Chelsea', leagues: ['england']},
-                        away_team: {name: 'Brighton', leagues: ['england']},
+                        home_team: {name: 'Chelsea'},
+                        away_team: {name: 'Brighton'},
                         league: 'england',
                     },
-                    outcome: 'home'
+                    model_name: 'simulation',
+                    outcome: 'home',
+                    confidence: null
                 }));
             })
         );
@@ -29,6 +31,7 @@ describe('ForecastApi', () => {
             home: {name: 'Chelsea', leagues: ['england']},
             away: {name: 'Brighton', leagues: ['england']},
             league: 'england',
+            model: {name: 'simulation'},
         });
 
         expect(receivedSearchParams.get('home_name')).toEqual('Chelsea');
@@ -38,8 +41,9 @@ describe('ForecastApi', () => {
             fixture: {
                 home: {name: 'Chelsea', leagues: ['england']},
                 away: {name: 'Brighton', leagues: ['england']},
-                league: 'england'
+                league: 'england',
             },
+            model: {name: 'simulation'},
             outcome: 'home'
         });
     });
@@ -49,10 +53,11 @@ describe('ForecastApi', () => {
             rest.get('/api/forecast', (req, res, ctx) => {
                 return res(ctx.json({
                     fixture: {
-                        home_team: {name: 'Chelsea', leagues: ['england']},
-                        away_team: {name: 'Brighton', leagues: ['england']},
+                        home_team: {name: 'Chelsea'},
+                        away_team: {name: 'Brighton'},
                         league: 'england',
                     },
+                    model_name: 'simulation',
                     outcome: 'home',
                     confidence: .43,
                 }));
@@ -63,14 +68,16 @@ describe('ForecastApi', () => {
             home: {name: 'Chelsea', leagues: ['england']},
             away: {name: 'Brighton', leagues: ['england']},
             league: 'england',
+            model: {name: 'simulation'},
         });
 
         expect(result).toEqual({
             fixture: {
                 home: {name: 'Chelsea', leagues: ['england']},
                 away: {name: 'Brighton', leagues: ['england']},
-                league: 'england'
+                league: 'england',
             },
+            model: {name: 'simulation'},
             outcome: 'home',
             confidence: .43,
         });

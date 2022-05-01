@@ -1,20 +1,26 @@
 from unittest import TestCase
-from matchpredictor.matchresults.result import Outcome, Team, Fixture
-from matchpredictor.predictors.predictor import Prediction
+
 from matchpredictor.forecast.forecaster import Forecaster, Forecast
+from matchpredictor.matchresults.result import Outcome, Team, Fixture
+from matchpredictor.model.model_provider import ModelProvider, Model
+from matchpredictor.predictors.predictor import Prediction
 
 
 class TestForecaster(TestCase):
-    def test_forecast(self) -> None:
-        def predictor(_: Fixture) -> Prediction:
-            return Prediction(outcome=Outcome.HOME, confidence=.78)
+    def setUp(self) -> None:
+        super().setUp()
 
-        forecaster = Forecaster(predictor)
+        home_model = Model(name='Home Model', predictor=lambda _: Prediction(Outcome.HOME))
+        away_model = Model(name='Away Model', predictor=lambda _: Prediction(Outcome.AWAY))
 
-        forecast = forecaster.forecast(
+        self.forecaster = Forecaster(ModelProvider([home_model, away_model]))
+
+    def test_forecast_home(self) -> None:
+        forecast = self.forecaster.forecast(
             Team(name='Chelsea'),
             Team(name='Burnley'),
             'UEFA Champions League',
+            'Home Model',
         )
 
         self.assertEqual(forecast, Forecast(
@@ -23,6 +29,36 @@ class TestForecaster(TestCase):
                 away_team=Team(name='Burnley'),
                 league='UEFA Champions League',
             ),
+            model_name='Home Model',
             outcome=Outcome.HOME,
-            confidence=.78
+            confidence=None
         ))
+
+    def test_forecast_away(self) -> None:
+        forecast = self.forecaster.forecast(
+            Team(name='Chelsea'),
+            Team(name='Burnley'),
+            'UEFA Champions League',
+            'Away Model',
+        )
+
+        self.assertEqual(forecast, Forecast(
+            fixture=Fixture(
+                home_team=Team(name='Chelsea'),
+                away_team=Team(name='Burnley'),
+                league='UEFA Champions League',
+            ),
+            model_name='Away Model',
+            outcome=Outcome.AWAY,
+            confidence=None
+        ))
+
+    def test_forecast_model_none(self) -> None:
+        forecast = self.forecaster.forecast(
+            Team(name='Chelsea'),
+            Team(name='Burnley'),
+            'UEFA Champions League',
+            'This model name does not exist'
+        )
+
+        self.assertIsNone(forecast)

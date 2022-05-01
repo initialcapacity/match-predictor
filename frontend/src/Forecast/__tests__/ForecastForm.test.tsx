@@ -9,10 +9,12 @@ import {mocked} from 'jest-mock';
 import {waitForPromise} from '../../testSupport/PromiseHelpers';
 import {teamsApi} from '../../Teams/TeamsApi';
 import {Team} from '../../Teams/TeamsState';
-import {fixtureState} from '../../Teams/FixtureState';
+import {forecastRequestState} from '../../Teams/ForecastRequestState';
+import {modelsApi} from '../../Model/ModelsApi';
 
 jest.mock('../ForecastApi');
 jest.mock('../../Teams/TeamsApi');
+jest.mock('../../Model/ModelsApi');
 
 describe('ForecastForm', () => {
     let store: Store<AppState>;
@@ -28,10 +30,12 @@ describe('ForecastForm', () => {
 
     beforeEach(() => {
         store = stateStore.create();
-        store.dispatch(fixtureState.setHome(chelsea));
-        store.dispatch(fixtureState.setAway(burnley));
+        store.dispatch(forecastRequestState.setHome(chelsea));
+        store.dispatch(forecastRequestState.setAway(burnley));
+        store.dispatch(forecastRequestState.setModel({name: 'home'}));
 
         mocked(teamsApi).fetch.mockImplementation(() => mockTeamsResponse);
+        mocked(modelsApi).fetch.mockImplementation(() => Promise.resolve([{name: 'home'}, {name: 'linear'}]));
     });
 
     test('loads teams', async () => {
@@ -68,12 +72,14 @@ describe('ForecastForm', () => {
     });
 
     test('submit', async () => {
-        store.dispatch(fixtureState.setHome(chelsea));
-        store.dispatch(fixtureState.setAway(burnley));
+        store.dispatch(forecastRequestState.setHome(chelsea));
+        store.dispatch(forecastRequestState.setAway(burnley));
+        store.dispatch(forecastRequestState.setModel({name: 'linear'}));
 
         const forecast: Forecast = {
             fixture: {home: chelsea, away: burnley, league: 'england'},
-            outcome: 'home'
+            outcome: 'home',
+            model: {name: 'linear'}
         };
 
         const mockForecastResponse = Promise.resolve(forecast);
@@ -89,6 +95,7 @@ describe('ForecastForm', () => {
         expect(mocked(forecastApi).fetchFor.mock.calls[0][0]).toEqual({
             away: burnley,
             home: chelsea,
+            model: {name: 'linear'},
         });
 
         await waitForPromise(mockForecastResponse);

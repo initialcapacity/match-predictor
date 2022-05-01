@@ -4,13 +4,13 @@ import {match} from 'ts-pattern';
 import {ReactElement, useEffect, useMemo, useState} from 'react';
 import {Team, TeamList} from './TeamsState';
 import {Select} from '../Forms/Inputs';
-import {fixtureState} from './FixtureState';
+import {forecastRequestState} from './ForecastRequestState';
 
 type Side = 'home' | 'away'
 
 const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement => {
     const dispatch = useDispatch();
-    const selectedTeam = useSelector((app: AppState) => app.fixture[props.side]);
+    const selectedTeam = useSelector((app: AppState) => app.forecastRequest[props.side]);
     const [league, setLeague] = useState<string>('');
 
     const teams = useMemo<Team[]>(
@@ -29,8 +29,8 @@ const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement =
 
         if (team) {
             match(props.side)
-                .with('home', () => dispatch(fixtureState.setHome(team)))
-                .with('away', () => dispatch(fixtureState.setAway(team)))
+                .with('home', () => dispatch(forecastRequestState.setHome(team)))
+                .with('away', () => dispatch(forecastRequestState.setAway(team)))
                 .exhaustive();
         }
     };

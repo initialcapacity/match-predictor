@@ -18,7 +18,7 @@ backend/install:
 backend/types:
 	cd backend; \
 	source env/bin/activate; \
-	mypy matchpredictor test; \
+	mypy matchpredictor test fakecsvprovider; \
 
 .PHONY: backend/test
 backend/test: backend/types

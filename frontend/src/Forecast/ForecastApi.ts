@@ -1,7 +1,7 @@
 import {Forecast} from './ForecastState';
 import * as schemawax from 'schemawax';
 import {http} from '../Http/Http';
-import {Fixture} from '../Teams/FixtureState';
+import {ForecastRequest} from '../Teams/ForecastRequestState';
 
 const teamDecoder: schemawax.Decoder<{ name: string }> = schemawax.object({required: {name: schemawax.string}});
 
@@ -15,26 +15,29 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
                     league: schemawax.string,
                 }
             }),
-            outcome: schemawax.literalUnion('home', 'away', 'draw')
+            outcome: schemawax.literalUnion('home', 'away', 'draw'),
+            model_name: schemawax.string
         },
         optional: {
-            confidence: schemawax.number
+            confidence: schemawax.nullable(schemawax.number)
         }
     }).andThen((json): Forecast => ({
         fixture: {
-            home: { name: json.fixture.home_team.name, leagues: [json.fixture.league]},
-            away: { name: json.fixture.away_team.name, leagues: [json.fixture.league]},
-            league: json.fixture.league
+            home: {name: json.fixture.home_team.name, leagues: [json.fixture.league]},
+            away: {name: json.fixture.away_team.name, leagues: [json.fixture.league]},
+            league: json.fixture.league,
         },
+        model: {name: json.model_name},
         outcome: json.outcome,
-        confidence: json.confidence,
+        confidence: json.confidence || undefined,
     }));
 
-const fetchFor = (fixture: Fixture): Promise<Forecast> => {
+const fetchFor = (request: ForecastRequest): Promise<Forecast> => {
     const params = new URLSearchParams({
-        home_name: fixture.home.name,
-        away_name: fixture.away.name,
-        league: fixture.league,
+        home_name: request.home.name,
+        away_name: request.away.name,
+        league: request.league,
+        model_name: request.model.name,
     });
 
     return http.sendRequest(`/api/forecast?${params}`, forecastDecoder);
