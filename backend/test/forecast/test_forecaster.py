@@ -3,15 +3,21 @@ from unittest import TestCase
 from matchpredictor.forecast.forecaster import Forecaster, Forecast
 from matchpredictor.matchresults.result import Outcome, Team, Fixture
 from matchpredictor.model.model_provider import ModelProvider, Model
-from matchpredictor.predictors.predictor import Prediction
+from matchpredictor.predictors.predictor import Prediction, Predictor
 
 
 class TestForecaster(TestCase):
     def setUp(self) -> None:
         super().setUp()
 
-        home_model = Model(name='Home Model', predictor=lambda _: Prediction(Outcome.HOME))
-        away_model = Model(name='Away Model', predictor=lambda _: Prediction(Outcome.AWAY))
+        home_model = Model(
+            name="Home Model",
+            predictor=type("Home", (Predictor, object), {"predict": lambda _, __: Prediction(outcome=Outcome.HOME)})()
+        )
+        away_model = Model(
+            name="Away Model",
+            predictor=type("Away", (Predictor, object), {"predict": lambda _, __: Prediction(outcome=Outcome.AWAY)})()
+        )
 
         self.forecaster = Forecaster(ModelProvider([home_model, away_model]))
 

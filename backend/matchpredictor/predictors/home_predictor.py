@@ -1,6 +1,7 @@
 from matchpredictor.matchresults.result import Fixture, Outcome
-from matchpredictor.predictors.predictor import Prediction
+from matchpredictor.predictors.predictor import Prediction, Predictor
 
 
-def home_predictor(fixture: Fixture) -> Prediction:
-    return Prediction(outcome=Outcome.HOME)
+class HomePredictor(Predictor):
+    def predict(self, fixture: Fixture) -> Prediction:
+        return Prediction(outcome=Outcome.HOME)

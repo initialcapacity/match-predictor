@@ -10,11 +10,14 @@ from matchpredictor.matchresults.result import Fixture, Outcome, Result, Team
 from matchpredictor.predictors.predictor import Predictor, Prediction
 
 
-def linear_regression_predictor(model: LogisticRegression, team_encoding: OneHotEncoder) -> Predictor:
+class LinearRegressionPredictor(Predictor):
+    def __init__(self, model: LogisticRegression, team_encoding: OneHotEncoder) -> None:
+        self.model = model
+        self.team_encoding = team_encoding
 
-    def predict(fixture: Fixture) -> Prediction:
-        encoded_home_name = encode_team(fixture.home_team)
-        encoded_away_name = encode_team(fixture.away_team)
+    def predict(self, fixture: Fixture) -> Prediction:
+        encoded_home_name = self.__encode_team(fixture.home_team)
+        encoded_away_name = self.__encode_team(fixture.away_team)
 
         if encoded_home_name is None:
             return Prediction(outcome=Outcome.AWAY)
@@ -22,7 +25,7 @@ def linear_regression_predictor(model: LogisticRegression, team_encoding: OneHot
             return Prediction(outcome=Outcome.HOME)
 
         x: NDArray[float64] = np.concatenate([encoded_home_name, encoded_away_name], 1)  # type: ignore
-        pred = model.predict(x)
+        pred = self.model.predict(x)
 
         if pred > 0:
             return Prediction(outcome=Outcome.HOME)
@@ -31,13 +34,11 @@ def linear_regression_predictor(model: LogisticRegression, team_encoding: OneHot
         else:
             return Prediction(outcome=Outcome.DRAW)
 
-    def encode_team(team: Team) -> Optional[NDArray[float64]]:
+    def __encode_team(self, team: Team) -> Optional[NDArray[float64]]:
         try:
-            return team_encoding.transform(np.array(team.name).reshape(-1, 1))  # type: ignore
+            return self.team_encoding.transform(np.array(team.name).reshape(-1, 1))  # type: ignore
         except ValueError:
             return None
-
-    return predict
 
 
 def build_model(results: List[Result]) -> Tuple[LogisticRegression, OneHotEncoder]:
@@ -64,4 +65,4 @@ def build_model(results: List[Result]) -> Tuple[LogisticRegression, OneHotEncode
 def train_regression_predictor(results: List[Result]) -> Predictor:
     model, team_encoding = build_model(results)
 
-    return linear_regression_predictor(model, team_encoding)
+    return LinearRegressionPredictor(model, team_encoding)

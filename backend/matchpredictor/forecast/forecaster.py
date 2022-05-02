@@ -28,7 +28,7 @@ class Forecaster:
         if model is None:
             return None
 
-        prediction = model.predictor(fixture)
+        prediction = model.predictor.predict(fixture)
 
         return Forecast(
             fixture=fixture,

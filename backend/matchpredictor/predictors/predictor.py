@@ -1,5 +1,6 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Optional, TypeAlias, Callable
+from typing import Optional
 
 from matchpredictor.matchresults.result import Fixture, Outcome
 
@@ -10,4 +11,7 @@ class Prediction:
     confidence: Optional[float] = None
 
 
-Predictor: TypeAlias = Callable[[Fixture], Prediction]
+class Predictor(ABC):
+    @abstractmethod
+    def predict(self, fixture: Fixture) -> Prediction:
+        pass

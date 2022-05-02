@@ -22,11 +22,13 @@ class PointsTable:
         self.points_dict[team.name] = previous_points + points
 
 
-def past_results_predictor(table: PointsTable) -> Predictor:
+class PastResultsPredictor(Predictor):
+    def __init__(self, table: PointsTable) -> None:
+        self.table = table
 
-    def predict(fixture: Fixture) -> Prediction:
-        home_points = table.points_for(fixture.home_team)
-        away_points = table.points_for(fixture.away_team)
+    def predict(self, fixture: Fixture) -> Prediction:
+        home_points = self.table.points_for(fixture.home_team)
+        away_points = self.table.points_for(fixture.away_team)
 
         if home_points > away_points:
             return Prediction(Outcome.HOME)
@@ -34,8 +36,6 @@ def past_results_predictor(table: PointsTable) -> Predictor:
             return Prediction(Outcome.AWAY)
         else:
             return Prediction(Outcome.DRAW)
-
-    return predict
 
 
 def calculate_table(results: Iterable[Result]) -> PointsTable:
@@ -54,4 +54,4 @@ def calculate_table(results: Iterable[Result]) -> PointsTable:
 
 
 def train_results_predictor(results: Iterable[Result]) -> Predictor:
-    return past_results_predictor(calculate_table(results))
+    return PastResultsPredictor(calculate_table(results))

@@ -1,13 +1,19 @@
 from unittest import TestCase
 
-from matchpredictor.matchresults.result import Outcome
+from matchpredictor.matchresults.result import Outcome, Fixture
 from matchpredictor.model.model_provider import ModelProvider, Model
-from matchpredictor.predictors.predictor import Prediction
+from matchpredictor.predictors.predictor import Prediction, Predictor
 
 
 class TestModelProvider(TestCase):
-    home_model = Model(name="home model", predictor=lambda _: Prediction(outcome=Outcome.HOME))
-    away_model = Model(name="away model", predictor=lambda _: Prediction(outcome=Outcome.AWAY))
+    home_model = Model(
+        name="home model",
+        predictor=type("Home", (Predictor, object), {"predict": lambda _, __: Prediction(outcome=Outcome.HOME)})()
+    )
+    away_model = Model(
+        name="away model",
+        predictor=type("Away", (Predictor, object), {"predict": lambda _, __: Prediction(outcome=Outcome.AWAY)})()
+    )
 
     provider = ModelProvider([home_model, away_model])
 
