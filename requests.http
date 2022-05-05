@@ -17,3 +17,8 @@ GET http://localhost:5001/forecast?home_name=Chelsea&away_name=Burnley&league=Ba
 Accept: application/json
 
 ###
+
+GET http://localhost:5001/forecast-in-progress?home_name=Seattle+Sounders&away_name=Pumas+Unam&league=Major+League+Soccer&model_name=Full+simulator&minutes_elapsed=45&home_goals=1&away_goals=0
+Accept: application/json
+
+###

@@ -6,6 +6,7 @@ import {Result} from '../Http/Result';
 
 export interface Model {
     name: string;
+    predicts_in_progress: boolean;
 }
 
 export interface ModelList {

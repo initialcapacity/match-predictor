@@ -13,13 +13,19 @@ describe('ModelsApi', () => {
         server.use(
             rest.get('/api/models', (req, res, ctx) => {
                 return res(ctx.json({
-                    models: ['linear regression', 'coin flip'],
+                    models: [
+                        {name: 'linear regression', predicts_in_progress: false},
+                        {name: 'coin flip', predicts_in_progress: true},
+                    ],
                 }));
             })
         );
 
         const result = await modelsApi.fetch();
 
-        expect(result).toEqual([{name: 'linear regression'}, {name: 'coin flip'}]);
+        expect(result).toEqual([
+            {name: 'linear regression', predicts_in_progress: false},
+            {name: 'coin flip', predicts_in_progress: true},
+        ]);
     });
 });

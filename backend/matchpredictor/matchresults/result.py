@@ -14,6 +14,13 @@ class Fixture(object):
     league: str
 
 
+@dataclass(frozen=True)
+class Scenario(object):
+    minutes_elapsed: int
+    home_goals: int
+    away_goals: int
+
+
 class Outcome(str, Enum):
     HOME = "home"
     AWAY = "away"

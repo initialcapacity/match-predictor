@@ -1,18 +1,21 @@
 from typing import Iterable
 
-from matchpredictor.matchresults.result import Fixture, Outcome, Result
-from matchpredictor.predictors.predictor import Predictor, Prediction
+from matchpredictor.matchresults.result import Fixture, Outcome, Result, Scenario
+from matchpredictor.predictors.predictor import Predictor, Prediction, InProgressPredictor
 from matchpredictor.predictors.simulators.scoring_rates import ScoringRates
 from matchpredictor.predictors.simulators.simulator import Simulator, offense_simulator, offense_and_defense_simulator
 
 
-class SimulationPredictor(Predictor):
+class SimulationPredictor(InProgressPredictor):
     def __init__(self, simulator: Simulator, simulations: int) -> None:
         self.simulator = simulator
         self.simulations = simulations
 
     def predict(self, fixture: Fixture) -> Prediction:
-        results = [self.simulator(fixture) for _ in range(self.simulations)]
+        return self.predict_in_progress(fixture, Scenario(0, 0, 0))
+
+    def predict_in_progress(self, fixture: Fixture, scenario: Scenario) -> Prediction:
+        results = [self.simulator(fixture, scenario) for _ in range(self.simulations)]
 
         home_count = sum(map(lambda r: r is Outcome.HOME, results))
         away_count = sum(map(lambda r: r is Outcome.AWAY, results))
