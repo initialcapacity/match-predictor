@@ -31,7 +31,8 @@ describe('ForecastApi', () => {
             home: {name: 'Chelsea', leagues: ['england']},
             away: {name: 'Brighton', leagues: ['england']},
             league: 'england',
-            model: {name: 'simulation'},
+            model: {name: 'simulation', predicts_in_progress: false},
+            matchStatus: {type: 'not started'}
         });
 
         expect(receivedSearchParams.get('home_name')).toEqual('Chelsea');
@@ -43,7 +44,7 @@ describe('ForecastApi', () => {
                 away: {name: 'Brighton', leagues: ['england']},
                 league: 'england',
             },
-            model: {name: 'simulation'},
+            model_name: 'simulation',
             outcome: 'home'
         });
     });
@@ -68,7 +69,8 @@ describe('ForecastApi', () => {
             home: {name: 'Chelsea', leagues: ['england']},
             away: {name: 'Brighton', leagues: ['england']},
             league: 'england',
-            model: {name: 'simulation'},
+            model: {name: 'simulation', predicts_in_progress: false},
+            matchStatus: {type: 'not started'}
         });
 
         expect(result).toEqual({
@@ -77,7 +79,48 @@ describe('ForecastApi', () => {
                 away: {name: 'Brighton', leagues: ['england']},
                 league: 'england',
             },
-            model: {name: 'simulation'},
+            model_name: 'simulation',
+            outcome: 'home',
+            confidence: .43,
+        });
+    });
+
+    test('fetchFor in progress', async () => {
+        server.use(
+            rest.get('/api/forecast-in-progress', (req, res, ctx) => {
+                return res(ctx.json({
+                    fixture: {
+                        home_team: {name: 'Chelsea'},
+                        away_team: {name: 'Brighton'},
+                        league: 'england',
+                    },
+                    model_name: 'simulation',
+                    outcome: 'home',
+                    confidence: .43,
+                }));
+            })
+        );
+
+        const result = await forecastApi.fetchFor({
+            home: {name: 'Chelsea', leagues: ['england']},
+            away: {name: 'Brighton', leagues: ['england']},
+            league: 'england',
+            model: {name: 'simulation', predicts_in_progress: true},
+            matchStatus: {
+                type: 'in progress',
+                minutesElapsed: 30,
+                homeGoals: 1,
+                awayGoals: 2,
+            }
+        });
+
+        expect(result).toEqual({
+            fixture: {
+                home: {name: 'Chelsea', leagues: ['england']},
+                away: {name: 'Brighton', leagues: ['england']},
+                league: 'england',
+            },
+            model_name: 'simulation',
             outcome: 'home',
             confidence: .43,
         });

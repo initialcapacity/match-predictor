@@ -1,13 +1,31 @@
 input, select {
+    margin-top: .4rem;
+    margin-left: -.3rem;
     padding: .3rem;
-    width: 16rem;
+
     font-size: 1rem;
+    font-weight: 400;
+    color: var(--black);
+}
+
+input:not([type=checkbox]), select {
+    width: 100%;
+}
+
+input[type=checkbox] {
+    margin-right: .6rem;
 }
 
 label {
-    position: relative;
-    padding-top: 1.6rem;
     display: block;
+    margin-top: .6rem;
+    padding-left: .3rem;
+    margin-bottom: 2rem;
+
+    flex: 1;
+    font-size: .8rem;
+    font-weight: bold;
+    color: var(--accent);
 }
 
 legend {
@@ -24,10 +42,6 @@ fieldset {
     font-weight: bold;
     align-self: flex-end;
     margin-bottom: .5rem;
-}
-
-fieldset:not(:last-child) {
-    margin-bottom: 2rem;
 }
 
 label span:first-child {

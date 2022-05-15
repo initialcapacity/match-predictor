@@ -27,15 +27,17 @@ describe('ForecastForm', () => {
         {name: 'Rangers', leagues: ['scotland']},
     ];
     const mockTeamsResponse = Promise.resolve(teams);
-
     beforeEach(() => {
         store = stateStore.create();
         store.dispatch(forecastRequestState.setHome(chelsea));
         store.dispatch(forecastRequestState.setAway(burnley));
-        store.dispatch(forecastRequestState.setModel({name: 'home'}));
+        store.dispatch(forecastRequestState.setModel({name: 'home', predicts_in_progress: false}));
 
         mocked(teamsApi).fetch.mockImplementation(() => mockTeamsResponse);
-        mocked(modelsApi).fetch.mockImplementation(() => Promise.resolve([{name: 'home'}, {name: 'linear'}]));
+        mocked(modelsApi).fetch.mockImplementation(() => Promise.resolve([
+            {name: 'home', predicts_in_progress: false},
+            {name: 'linear', predicts_in_progress: false}
+        ]));
     });
 
     test('loads teams', async () => {
@@ -74,12 +76,12 @@ describe('ForecastForm', () => {
     test('submit', async () => {
         store.dispatch(forecastRequestState.setHome(chelsea));
         store.dispatch(forecastRequestState.setAway(burnley));
-        store.dispatch(forecastRequestState.setModel({name: 'linear'}));
+        store.dispatch(forecastRequestState.setModel({name: 'linear', predicts_in_progress: false}));
 
         const forecast: Forecast = {
             fixture: {home: chelsea, away: burnley, league: 'england'},
             outcome: 'home',
-            model: {name: 'linear'}
+            model_name: 'linear',
         };
 
         const mockForecastResponse = Promise.resolve(forecast);
@@ -95,7 +97,8 @@ describe('ForecastForm', () => {
         expect(mocked(forecastApi).fetchFor.mock.calls[0][0]).toEqual({
             away: burnley,
             home: chelsea,
-            model: {name: 'linear'},
+            model: {name: 'linear', 'predicts_in_progress': false},
+            matchStatus: {type: 'not started'}
         });
 
         await waitForPromise(mockForecastResponse);

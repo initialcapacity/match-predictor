@@ -10,7 +10,7 @@ export type Outcome = 'home' | 'away' | 'draw'
 export type Forecast = {
     fixture: Fixture,
     outcome: Outcome,
-    model: Model,
+    model_name: string
     confidence?: number,
 };
 

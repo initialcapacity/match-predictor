@@ -27,7 +27,7 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
             away: {name: json.fixture.away_team.name, leagues: [json.fixture.league]},
             league: json.fixture.league,
         },
-        model: {name: json.model_name},
+        model_name: json.model_name,
         outcome: json.outcome,
         confidence: json.confidence || undefined,
     }));
@@ -40,7 +40,15 @@ const fetchFor = (request: ForecastRequest): Promise<Forecast> => {
         model_name: request.model.name,
     });
 
-    return http.sendRequest(`/api/forecast?${params}`, forecastDecoder);
+    if (request.matchStatus.type == 'in progress') {
+        params.append('home_goals', request.matchStatus.homeGoals.toString());
+        params.append('away_goals', request.matchStatus.awayGoals.toString());
+        params.append('minutes_elapsed', request.matchStatus.minutesElapsed.toString());
+
+        return http.sendRequest(`/api/forecast-in-progress?${params}`, forecastDecoder);
+    } else {
+        return http.sendRequest(`/api/forecast?${params}`, forecastDecoder);
+    }
 };
 
 export const forecastApi = {

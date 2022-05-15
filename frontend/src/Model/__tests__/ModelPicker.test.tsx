@@ -14,8 +14,8 @@ describe('ModelPicker', () => {
         store = stateStore.create();
 
         store.dispatch(modelsState.finishedLoading(result.ok([
-            {name: 'linear regression'},
-            {name: 'coin flip'},
+            {name: 'linear regression', predicts_in_progress: false},
+            {name: 'coin flip', predicts_in_progress: true},
         ])));
     });
 
@@ -25,9 +25,9 @@ describe('ModelPicker', () => {
         </TestAppContext>);
 
         userEvent.selectOptions(page.getByLabelText('model'), 'linear regression');
-        expect(store.getState().forecastRequest.model).toEqual({name: 'linear regression'});
+        expect(store.getState().forecastRequest.model).toEqual({name: 'linear regression', predicts_in_progress: false});
 
         userEvent.selectOptions(page.getByLabelText('model'), 'coin flip');
-        expect(store.getState().forecastRequest.model).toEqual({name: 'coin flip'});
+        expect(store.getState().forecastRequest.model).toEqual({name: 'coin flip', predicts_in_progress: true});
     });
 });

@@ -11,6 +11,7 @@ import {teamsState} from '../Teams/TeamsState';
 import {modelsApi} from '../Model/ModelsApi';
 import {modelsState} from '../Model/ModelsState';
 import ModelPicker from '../Model/ModelPicker';
+import InProgressForm from '../InProgress/InProgressForm';
 
 const ForecastForm = (): ReactElement => {
     const dispatch = useDispatch();
@@ -48,6 +49,7 @@ const ForecastForm = (): ReactElement => {
             <fieldset>
                 <ModelPicker/>
             </fieldset>
+            <InProgressForm/>
 
             <button type="submit">Submit</button>
         </form>

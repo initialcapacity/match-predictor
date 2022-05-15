@@ -1,0 +1,8 @@
+fieldset.column {
+    flex-direction: column;
+    gap: 0;
+}
+
+fieldset.column label:not(:last-child) {
+    margin-bottom: 0;
+}
