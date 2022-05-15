@@ -3,7 +3,6 @@ import {match} from 'ts-pattern';
 import {remoteData, RemoteData} from '../Http/RemoteData';
 import {Result} from '../Http/Result';
 import {Fixture} from '../Teams/ForecastRequestState';
-import {Model} from '../Model/ModelsState';
 
 export type Outcome = 'home' | 'away' | 'draw'
 

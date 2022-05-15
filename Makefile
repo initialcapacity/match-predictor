@@ -44,8 +44,12 @@ backend/run:
 	source env/bin/activate; \
 	python -m matchpredictor; \
 
+.PHONY: frontend/lint
+frontend/lint:
+	npm --prefix frontend run lint
+
 .PHONY: frontend/test
-frontend/test:
+frontend/test: frontend/lint
 	npm --prefix frontend test
 
 .PHONY: frontend/install
