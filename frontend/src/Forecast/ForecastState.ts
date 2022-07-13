@@ -3,6 +3,7 @@ import {match} from 'ts-pattern';
 import {remoteData, RemoteData} from '../Http/RemoteData';
 import {Result} from '../Http/Result';
 import {Fixture} from '../Teams/ForecastRequestState';
+import {Http} from '../Http/Http';
 
 export type Outcome = 'home' | 'away' | 'draw'
 
@@ -14,7 +15,7 @@ export type Forecast = {
 };
 
 export type ForecastState = {
-    data: RemoteData<Forecast, string>
+    data: RemoteData<Forecast, Http.Error>
 };
 
 const initialState: ForecastState = {
@@ -23,7 +24,7 @@ const initialState: ForecastState = {
 
 type ForecastAction =
     | { type: 'forecast/start loading' }
-    | { type: 'forecast/finished loading', value: Result<Forecast, string> }
+    | { type: 'forecast/finished loading', value: Result<Forecast, Http.Error> }
 
 const isForecastAction = (variable: unknown): variable is ForecastAction =>
     (variable as ForecastAction).type.startsWith('forecast/');
@@ -31,25 +32,18 @@ const isForecastAction = (variable: unknown): variable is ForecastAction =>
 const startLoading: ForecastAction =
     {type: 'forecast/start loading'};
 
-const finishedLoading = (value: Result<Forecast, string>): ForecastAction =>
+const finishedLoading = (value: Result<Forecast, Http.Error>): ForecastAction =>
     ({type: 'forecast/finished loading', value});
 
-const reducer: Reducer<ForecastState, Action> = (state = initialState, action: Action): ForecastState => {
-    if (!isForecastAction(action)) return state;
+const reducer: Reducer<ForecastState, Action> =
+    (state = initialState, action: Action): ForecastState => {
+        if (!isForecastAction(action)) return state;
 
-    return match(action)
-        .with({type: 'forecast/start loading'}, (): ForecastState => ({
-            data: remoteData.loading()
-        }))
-        .with({type: 'forecast/finished loading'}, ({value}): ForecastState => {
-            if (value.isOk) {
-                return {data: remoteData.loaded(value.data)};
-            } else {
-                return {data: remoteData.failure(value.reason)};
-            }
-        })
-        .exhaustive();
-};
+        return match<ForecastAction, ForecastState>(action)
+            .with({type: 'forecast/start loading'}, () => ({data: remoteData.loading()}))
+            .with({type: 'forecast/finished loading'}, ({value}) => ({data: remoteData.ofResult(value)}))
+            .exhaustive();
+    };
 
 export const forecastState = {
     startLoading,

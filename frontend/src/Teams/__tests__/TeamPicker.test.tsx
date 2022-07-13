@@ -1,5 +1,5 @@
 import {render} from '@testing-library/react';
-import {TestAppContext} from '../../testSupport/TestAppContext';
+import {TestAppContext} from '../../TestSupport/TestAppContext';
 import TeamPicker from '../TeamPicker';
 import {Store} from 'redux';
 import {AppState, stateStore} from '../../App/StateStore';

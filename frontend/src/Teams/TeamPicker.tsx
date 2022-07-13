@@ -63,7 +63,8 @@ const TeamPicker = (props: { side: Side }): ReactElement => {
     return match(teams)
         .with({type: 'loading'}, () => <>Loading</>)
         .with({type: 'not loaded'}, () => <>No teams available</>)
-        .with({type: 'loaded'}, data => <TeamSelector teamList={data.value} side={props.side}/>)
+        .with({type: 'loaded'}, ({value}) => <TeamSelector teamList={value} side={props.side}/>)
+        .with({type: 'refreshing'}, ({value}) => <TeamSelector teamList={value} side={props.side}/>)
         .with({type: 'failure'}, data => <>{data.error}</>)
         .exhaustive();
 };

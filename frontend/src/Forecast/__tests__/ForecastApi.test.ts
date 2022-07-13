@@ -1,6 +1,7 @@
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
 import {forecastApi} from '../ForecastApi';
+import {result} from '../../Http/Result';
 
 const server = setupServer();
 
@@ -27,7 +28,7 @@ describe('ForecastApi', () => {
             })
         );
 
-        const result = await forecastApi.fetchFor({
+        const res = await forecastApi.fetchFor({
             home: {name: 'Chelsea', leagues: ['england']},
             away: {name: 'Brighton', leagues: ['england']},
             league: 'england',
@@ -38,7 +39,7 @@ describe('ForecastApi', () => {
         expect(receivedSearchParams.get('home_name')).toEqual('Chelsea');
         expect(receivedSearchParams.get('away_name')).toEqual('Brighton');
         expect(receivedSearchParams.get('league')).toEqual('england');
-        expect(result).toEqual({
+        expect(res).toEqual(result.ok({
             fixture: {
                 home: {name: 'Chelsea', leagues: ['england']},
                 away: {name: 'Brighton', leagues: ['england']},
@@ -46,7 +47,7 @@ describe('ForecastApi', () => {
             },
             model_name: 'simulation',
             outcome: 'home'
-        });
+        }));
     });
 
     test('fetchFor with confidence', async () => {
@@ -65,7 +66,7 @@ describe('ForecastApi', () => {
             })
         );
 
-        const result = await forecastApi.fetchFor({
+        const res = await forecastApi.fetchFor({
             home: {name: 'Chelsea', leagues: ['england']},
             away: {name: 'Brighton', leagues: ['england']},
             league: 'england',
@@ -73,7 +74,7 @@ describe('ForecastApi', () => {
             matchStatus: {type: 'not started'}
         });
 
-        expect(result).toEqual({
+        expect(res).toEqual(result.ok({
             fixture: {
                 home: {name: 'Chelsea', leagues: ['england']},
                 away: {name: 'Brighton', leagues: ['england']},
@@ -82,7 +83,7 @@ describe('ForecastApi', () => {
             model_name: 'simulation',
             outcome: 'home',
             confidence: .43,
-        });
+        }));
     });
 
     test('fetchFor in progress', async () => {
@@ -101,7 +102,7 @@ describe('ForecastApi', () => {
             })
         );
 
-        const result = await forecastApi.fetchFor({
+        const res = await forecastApi.fetchFor({
             home: {name: 'Chelsea', leagues: ['england']},
             away: {name: 'Brighton', leagues: ['england']},
             league: 'england',
@@ -114,7 +115,7 @@ describe('ForecastApi', () => {
             }
         });
 
-        expect(result).toEqual({
+        expect(res).toEqual(result.ok({
             fixture: {
                 home: {name: 'Chelsea', leagues: ['england']},
                 away: {name: 'Brighton', leagues: ['england']},
@@ -123,6 +124,6 @@ describe('ForecastApi', () => {
             model_name: 'simulation',
             outcome: 'home',
             confidence: .43,
-        });
+        }));
     });
 });

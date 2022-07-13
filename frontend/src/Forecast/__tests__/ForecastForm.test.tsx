@@ -1,16 +1,18 @@
-import {render} from '@testing-library/react';
-import {TestAppContext} from '../../testSupport/TestAppContext';
+import {render, waitFor} from '@testing-library/react';
+import {TestAppContext} from '../../TestSupport/TestAppContext';
 import ForecastForm from '../ForecastForm';
 import {Store} from 'redux';
 import {AppState, stateStore} from '../../App/StateStore';
 import {forecastApi} from '../ForecastApi';
 import {Forecast} from '../ForecastState';
 import {mocked} from 'jest-mock';
-import {waitForPromise} from '../../testSupport/PromiseHelpers';
+import {waitForPromise} from '../../TestSupport/PromiseHelpers';
 import {teamsApi} from '../../Teams/TeamsApi';
 import {Team} from '../../Teams/TeamsState';
 import {forecastRequestState} from '../../Teams/ForecastRequestState';
 import {modelsApi} from '../../Model/ModelsApi';
+import {result} from '../../Http/Result';
+import {http, Http} from '../../Http/Http';
 
 jest.mock('../ForecastApi');
 jest.mock('../../Teams/TeamsApi');
@@ -84,8 +86,8 @@ describe('ForecastForm', () => {
             model_name: 'linear',
         };
 
-        const mockForecastResponse = Promise.resolve(forecast);
-        mocked(forecastApi).fetchFor.mockImplementation(() => mockForecastResponse);
+        const mockForecastResponse = result.ok<Forecast, Http.Error>(forecast);
+        mocked(forecastApi).fetchFor.mockImplementation(async () =>  mockForecastResponse);
 
         const page = render(<TestAppContext store={store}>
             <ForecastForm/>
@@ -101,14 +103,14 @@ describe('ForecastForm', () => {
             matchStatus: {type: 'not started'}
         });
 
-        await waitForPromise(mockForecastResponse);
-
-        expect(store.getState().forecast.data.type).toEqual('loaded');
+        await waitFor(() => {
+            expect(store.getState().forecast.data.type).toEqual('loaded');
+        });
     });
 
     test('submit error', async () => {
-        const mockResponse = Promise.reject('A problem occurred');
-        mocked(forecastApi).fetchFor.mockImplementation(() => mockResponse);
+        const mockFailureResponse = result.err<Forecast, Http.Error>(http.connectionError);
+        mocked(forecastApi).fetchFor.mockImplementation(async () => mockFailureResponse);
 
         const page = render(<TestAppContext store={store}>
             <ForecastForm/>
@@ -116,8 +118,8 @@ describe('ForecastForm', () => {
 
         page.getByText('Submit').click();
 
-        await waitForPromise(mockResponse);
-
-        expect(store.getState().forecast.data.type).toEqual('failure');
+        await waitFor(() => {
+            expect(store.getState().forecast.data.type).toEqual('failure');
+        });
     });
 });

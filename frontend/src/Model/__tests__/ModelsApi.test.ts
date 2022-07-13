@@ -5,6 +5,7 @@ import {modelsApi} from '../ModelsApi';
 const server = setupServer();
 
 describe('ModelsApi', () => {
+
     beforeAll(() => server.listen());
     afterEach(() => server.resetHandlers());
     afterAll(() => server.close());
@@ -27,5 +28,19 @@ describe('ModelsApi', () => {
             {name: 'linear regression', predicts_in_progress: false},
             {name: 'coin flip', predicts_in_progress: true},
         ]);
+    });
+
+    test('fetch, on error', async () => {
+        server.use(
+            rest.get('/api/models', (req, res, ctx) => {
+                return res(ctx.json({
+                    models: {this: 'is wrong'},
+                }));
+            })
+        );
+
+        const result = await modelsApi.fetch();
+
+        expect(result).toEqual([]);
     });
 });

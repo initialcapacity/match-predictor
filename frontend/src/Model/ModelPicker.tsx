@@ -37,7 +37,8 @@ const ModelPicker = (): ReactElement => {
     return match(models)
         .with({type: 'loading'}, () => <>Loading</>)
         .with({type: 'not loaded'}, () => <>No models available</>)
-        .with({type: 'loaded'}, data => <ModelSelector modelList={data.value}/>)
+        .with({type: 'loaded'}, ({value}) => <ModelSelector modelList={value}/>)
+        .with({type: 'refreshing'}, ({value}) => <ModelSelector modelList={value}/>)
         .with({type: 'failure'}, data => <>{data.error}</>)
         .exhaustive();
 };

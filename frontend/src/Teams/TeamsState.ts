@@ -4,12 +4,12 @@ import {remoteData, RemoteData} from '../Http/RemoteData';
 import {Result} from '../Http/Result';
 
 
-export interface Team {
+export type Team = {
     name: string;
     leagues: string[];
 }
 
-export interface TeamList {
+export type TeamList = {
     teams: Team[];
     leagues: string[];
 }

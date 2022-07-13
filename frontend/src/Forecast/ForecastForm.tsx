@@ -13,7 +13,7 @@ import {modelsState} from '../Model/ModelsState';
 import ModelPicker from '../Model/ModelPicker';
 import InProgressForm from '../InProgress/InProgressForm';
 
-const ForecastForm = (): ReactElement => {
+export const ForecastForm = (): ReactElement => {
     const dispatch = useDispatch();
 
     const forecastRequest = useSelector((app: AppState) => app.forecastRequest);
@@ -37,9 +37,8 @@ const ForecastForm = (): ReactElement => {
 
         forecastApi.fetchFor(forecastRequest as ForecastRequest)
             .then(forecast => {
-                dispatch(forecastState.finishedLoading(result.ok(forecast)));
-            })
-            .catch(message => dispatch(forecastState.finishedLoading(result.err(message))));
+                dispatch(forecastState.finishedLoading(forecast));
+            });
     };
 
     return <article>

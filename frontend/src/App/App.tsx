@@ -3,6 +3,7 @@ import logo from '../logo.svg';
 import {stateStore} from './StateStore';
 import {Provider} from 'react-redux';
 import Forecaster from '../Forecast/Forecaster';
+import {appConfig, AppConfigContext} from './AppConfig';
 
 const Header = () => <header>
     <div className="container">
@@ -14,10 +15,12 @@ const Header = () => <header>
 </header>;
 
 const App = () => <>
-    <Provider store={stateStore.create()}>
-        <Header/>
-        <Forecaster/>
-    </Provider>
+    <AppConfigContext.Provider value={appConfig.fromEnv()}>
+        <Provider store={stateStore.create()}>
+            <Header/>
+            <Forecaster/>
+        </Provider>
+    </AppConfigContext.Provider>
 </>;
 
 export default App;

@@ -1,7 +1,7 @@
 import {Store} from 'redux';
 import {AppState, stateStore} from '../../App/StateStore';
 import {fireEvent, render} from '@testing-library/react';
-import {TestAppContext} from '../../testSupport/TestAppContext';
+import {TestAppContext} from '../../TestSupport/TestAppContext';
 import {forecastRequestState} from '../../Teams/ForecastRequestState';
 import ScenarioForm from '../ScenarioForm';
 

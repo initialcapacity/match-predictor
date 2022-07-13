@@ -1,10 +1,12 @@
-import {TestAppContext} from '../../testSupport/TestAppContext';
+import {TestAppContext} from '../../TestSupport/TestAppContext';
 import {Store} from 'redux';
 import {AppState, stateStore} from '../../App/StateStore';
 import {forecastState} from '../ForecastState';
 import ForecastResult from '../ForecastResult';
 import {render} from '@testing-library/react';
 import {result} from '../../Http/Result';
+import {forecastTestBuilders} from '../ForecastTestBuilders';
+import {http} from '../../Http/Http';
 
 describe('ForecastResult', () => {
     let store: Store<AppState>;
@@ -32,15 +34,15 @@ describe('ForecastResult', () => {
     });
 
     test('loaded', async () => {
-        store.dispatch(forecastState.finishedLoading(result.ok({
-            fixture: {
-                home: {name: 'Chelsea', leagues: ['england']},
-                away: {name: 'Burnley', leagues: ['england']},
-                league: 'england',
-                season: 2020
-            },
-            outcome: 'draw'
-        })));
+        store.dispatch(forecastState.finishedLoading(result.ok(
+            forecastTestBuilders.forecast({
+                fixture: forecastTestBuilders.fixture({
+                    home: forecastTestBuilders.team({name: 'Chelsea'}),
+                    away: forecastTestBuilders.team({name: 'Burnley'}),
+                }),
+                outcome: 'draw'
+            })
+        )));
 
         const page = render(<TestAppContext store={store}>
             <ForecastResult/>
@@ -51,16 +53,11 @@ describe('ForecastResult', () => {
     });
 
     test('loaded with confidence', async () => {
-        store.dispatch(forecastState.finishedLoading(result.ok({
-            fixture: {
-                home: {name: 'Chelsea', leagues: ['england']},
-                away: {name: 'Burnley', leagues: ['england']},
-                league: 'england',
-                season: 2020
-            },
-            outcome: 'draw',
-            confidence: .53345,
-        })));
+        store.dispatch(forecastState.finishedLoading(result.ok(
+            forecastTestBuilders.forecast({
+                confidence: .53345,
+            })
+        )));
 
         const page = render(<TestAppContext store={store}>
             <ForecastResult/>
@@ -70,16 +67,11 @@ describe('ForecastResult', () => {
     });
 
     test('loaded with confidence round up', async () => {
-        store.dispatch(forecastState.finishedLoading(result.ok({
-            fixture: {
-                home: {name: 'Chelsea', leagues: ['england']},
-                away: {name: 'Burnley', leagues: ['england']},
-                league: 'england',
-                season: 2020
-            },
-            outcome: 'draw',
-            confidence: .537,
-        })));
+        store.dispatch(forecastState.finishedLoading(result.ok(
+            forecastTestBuilders.forecast({
+                confidence: .537,
+            })
+        )));
 
         const page = render(<TestAppContext store={store}>
             <ForecastResult/>
@@ -89,7 +81,7 @@ describe('ForecastResult', () => {
     });
 
     test('error', async () => {
-        store.dispatch(forecastState.finishedLoading(result.err('There was a problem')));
+        store.dispatch(forecastState.finishedLoading(result.err(http.connectionError)));
 
         const page = render(<TestAppContext store={store}>
             <ForecastResult/>

@@ -1,6 +1,7 @@
 import * as schemawax from 'schemawax';
 import {http} from '../Http/Http';
 import {Model} from './ModelsState';
+import {result} from '../Http/Result';
 
 const modelsDecoder: schemawax.Decoder<Model[]> =
     schemawax.object({
@@ -14,9 +15,11 @@ const modelsDecoder: schemawax.Decoder<Model[]> =
         }
     }).andThen(json => json.models);
 
-const fetch = (): Promise<Model[]> => {
-    return http.sendRequest('/api/models', modelsDecoder);
-};
+const noModels: Model[] = [];
+
+const fetch = async (): Promise<Model[]> =>
+    http.sendRequest('/api/models', modelsDecoder)
+        .then(result.orElse(noModels));
 
 export const modelsApi = {
     fetch,

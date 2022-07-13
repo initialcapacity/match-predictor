@@ -1,28 +1,51 @@
 import * as schemawax from 'schemawax';
+import {result, Result} from './Result';
 
-const sendRequest = <T>(request: RequestInfo, decoder: schemawax.Decoder<T>): Promise<T> =>
-    new Promise((resolve, reject) => {
-        fetch(request).then(response => {
-            if (response.ok) {
-                response.json()
-                    .then(json => {
-                        const result = decoder.decode(json);
+export declare namespace Http {
+    type Error =
+        | { name: 'connection error' }
+        | { name: 'server error', message?: string }
+        | { name: 'deserialization error', json?: string }
+}
 
-                        if (result === null) {
-                            reject(`Unable to deserialize response: ${JSON.stringify(json)}`);
-                        } else {
-                            resolve(result);
-                        }
-                    })
-                    .catch(() => reject('Unable to deserialize response'));
-            } else {
-                response.text()
-                    .then(message => reject(message))
-                    .catch(error => reject(error));
-            }
-        });
-    });
+const connectionError: Http.Error =
+    {name: 'connection error'};
+
+const serverError = (message?: string): Http.Error =>
+    ({name: 'server error', message});
+
+const deserializationError = (json?: string): Http.Error =>
+    ({name: 'deserialization error', json});
+
+const sendRequest = async <T>(request: RequestInfo, decoder: schemawax.Decoder<T>): Promise<Result<T, Http.Error>> => {
+    const response = await fetch(request).catch(() => undefined);
+    if (response === undefined) {
+        return result.err(connectionError);
+    }
+
+    if (!response.ok) {
+        return response.text()
+            .then(message => result.err<T, Http.Error>(serverError(message)))
+            .catch(() => result.err(serverError()));
+    }
+
+    const json = await response.json().catch(() => undefined);
+    if (json === undefined) {
+        return result.err(deserializationError());
+    }
+
+    const decodedJson = decoder.decode(json);
+    if (decodedJson === null) {
+        const actualJson = JSON.stringify(json);
+        return result.err(deserializationError(actualJson));
+    }
+
+    return result.ok(decodedJson);
+};
 
 export const http = {
+    connectionError,
+    serverError,
+    deserializationError,
     sendRequest
 };

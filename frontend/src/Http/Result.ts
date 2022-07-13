@@ -8,7 +8,9 @@ export type Err<E> = {
     reason: E
 }
 
-export type Result<T, E> = (Ok<T> | Err<E>)
+export type Result<T, E> =
+    | Ok<T>
+    | Err<E>
 
 const ok = <T, E>(data: T): Result<T, E> => ({
     isOk: true,
@@ -20,7 +22,11 @@ const err = <T, E>(reason: E): Result<T, E> => ({
     reason,
 });
 
+const orElse = <T, E>(other: T) => (res: Result<T, E>): T =>
+    res.isOk ? res.data : other;
+
 export const result = {
     ok,
-    err
+    err,
+    orElse,
 };

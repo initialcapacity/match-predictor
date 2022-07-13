@@ -1,6 +1,7 @@
 import {Forecast} from './ForecastState';
 import * as schemawax from 'schemawax';
-import {http} from '../Http/Http';
+import {Http, http} from '../Http/Http';
+import {Result} from '../Http/Result';
 import {ForecastRequest} from '../Teams/ForecastRequestState';
 
 const teamDecoder: schemawax.Decoder<{ name: string }> = schemawax.object({required: {name: schemawax.string}});
@@ -32,7 +33,7 @@ const forecastDecoder: schemawax.Decoder<Forecast> =
         confidence: json.confidence || undefined,
     }));
 
-const fetchFor = (request: ForecastRequest): Promise<Forecast> => {
+const fetchFor = (request: ForecastRequest): Promise<Result<Forecast, Http.Error>> => {
     const params = new URLSearchParams({
         home_name: request.home.name,
         away_name: request.away.name,

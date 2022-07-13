@@ -2,45 +2,57 @@ import {setupServer} from 'msw/node';
 import {rest} from 'msw';
 import {http} from '../Http';
 import * as schemawax from 'schemawax';
+import {result} from '../Result';
 
 const server = setupServer();
 
-describe('ForecastApi', () => {
-    beforeAll(() => server.listen());
-    afterEach(() => server.resetHandlers());
-    afterAll(() => server.close());
+describe('Http', () => {
+
+    beforeEach(() => server.listen());
+    afterEach(() => server.close());
 
     const decoder = schemawax.object({required: {success: schemawax.boolean}});
 
     test('success', async () => {
         server.use(rest.get('/success', (req, res, ctx) => res(ctx.json({success: true}))));
 
-        const result = http.sendRequest('success', decoder);
+        const res = await http.sendRequest('success', decoder);
 
-        await expect(result).resolves.toEqual({success: true});
+        expect(res).toEqual(result.ok({success: true}));
+    });
+
+    test('connection error', async () => {
+        server.close();
+
+        const res = await http.sendRequest('error', decoder);
+
+        expect(res).toEqual(result.err({name: 'connection error'}));
     });
 
     test('500 error', async () => {
         server.use(rest.get('/error', (req, res, ctx) => res(ctx.status(500), ctx.text('Something went wrong'))));
 
-        const result = http.sendRequest('error', decoder);
+        const res = await http.sendRequest('error', decoder);
 
-        await expect(result).rejects.toEqual('Something went wrong');
+        expect(res).toEqual(result.err({name: 'server error', message: 'Something went wrong'}));
     });
 
     test('unexpected json error', async () => {
         server.use(rest.get('/error', (req, res, ctx) => res(ctx.json({unexpected: 'structure'}))));
 
-        const result = http.sendRequest('error', decoder);
+        const res = await http.sendRequest('error', decoder);
 
-        await expect(result).rejects.toEqual('Unable to deserialize response: {"unexpected":"structure"}');
+        expect(res).toEqual(result.err({
+            name: 'deserialization error',
+            json: '{"unexpected":"structure"}'
+        }));
     });
 
     test('not json error', async () => {
         server.use(rest.get('/error', (req, res, ctx) => res(ctx.text('not json'))));
 
-        const result = http.sendRequest('error', decoder);
+        const res = await http.sendRequest('error', decoder);
 
-        await expect(result).rejects.toEqual('Unable to deserialize response');
+        expect(res).toEqual(result.err({name: 'deserialization error'}));
     });
 });
