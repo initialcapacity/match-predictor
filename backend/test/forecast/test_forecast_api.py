@@ -3,6 +3,7 @@ from unittest import TestCase
 import responses
 
 from matchpredictor.app import create_app
+from test.test_builders import build_app_environment
 
 
 class TestForecastApi(TestCase):
@@ -19,7 +20,7 @@ class TestForecastApi(TestCase):
 2021,2020-11-14,0000,Test League,Other,Another,65.59,39.99,0.7832,0.0673,0.1495,2.58,0.62,77.1,28.8,1,1,0.49,0.45,1.05,0.75,3.15,0.0"""
         )
 
-        app = create_app('https://example.com/some.csv', 2023)
+        app = create_app(build_app_environment())
         self.test_client = app.test_client()
 
     def test_forecast_full_simulator_model(self) -> None:

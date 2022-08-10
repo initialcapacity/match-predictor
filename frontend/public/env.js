@@ -1,3 +1,3 @@
 window.env = {
-    enableUpcomingGames: 'false',
+    enableUpcomingGames: 'true',
 }

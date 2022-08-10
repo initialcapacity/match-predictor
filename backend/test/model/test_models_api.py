@@ -3,6 +3,7 @@ from unittest import TestCase
 import responses
 
 from matchpredictor.app import create_app
+from test.test_builders import build_app_environment
 
 
 class TestModelsApi(TestCase):
@@ -19,7 +20,7 @@ class TestModelsApi(TestCase):
                 2021,2021-09-17,1818,UEFA Champions League,Chelsea,Valencia,84.04,76.67,0.5901,0.1932,0.2167,1.93,1.01,81.3,85.8,0,1,3.11,0.88,2.44,0.72,0.0,1.05"""
         )
 
-        app = create_app('https://example.com/some.csv', 2023)
+        app = create_app(build_app_environment())
         self.test_client = app.test_client()
 
     def test_list_models(self) -> None:

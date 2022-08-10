@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import List
 
 from flask import Flask
@@ -15,9 +16,11 @@ from matchpredictor.predictors.past_results_predictor import train_results_predi
 from matchpredictor.predictors.simulation_predictor import train_offense_and_defense_predictor, train_offense_predictor
 from matchpredictor.teams.teams_api import teams_api
 from matchpredictor.teams.teams_provider import TeamsProvider
+from matchpredictor.upcominggames.football_data_api_client import FootballDataApiClient
+from matchpredictor.upcominggames.upcoming_games_api import upcoming_games_api
 
 
-def model_provider(training_data: List[Result]) -> ModelProvider:
+def build_model_provider(training_data: List[Result]) -> ModelProvider:
     return ModelProvider([
         Model("Home", HomePredictor()),
         Model("Points", train_results_predictor(training_data)),
@@ -30,22 +33,31 @@ def model_provider(training_data: List[Result]) -> ModelProvider:
     ])
 
 
-def create_app(csv_location: str, season: int) -> Flask:
+@dataclass
+class AppEnvironment:
+    csv_location: str
+    season: int
+    football_data_api_key: str
+
+
+def create_app(env: AppEnvironment) -> Flask:
     app = Flask(__name__)
 
     def last_two_years(result: Result) -> bool:
-        return result.season >= season - 2
+        return result.season >= env.season - 2
 
-    results = training_results(csv_location, season, last_two_years)
+    results = training_results(env.csv_location, env.season, last_two_years)
     fixtures = list(map(lambda r: r.fixture, results))
 
     teams_provider = TeamsProvider(fixtures)
-    models_provider = model_provider(results)
+    models_provider = build_model_provider(results)
     forecaster = Forecaster(models_provider)
+    football_data_api_client = FootballDataApiClient(env.football_data_api_key)
 
     app.register_blueprint(forecast_api(forecaster))
     app.register_blueprint(teams_api(teams_provider))
     app.register_blueprint(models_api(models_provider))
+    app.register_blueprint(upcoming_games_api(football_data_api_client))
     app.register_blueprint(health_api())
 
     return app

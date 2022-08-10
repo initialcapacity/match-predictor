@@ -4,6 +4,7 @@ from unittest import TestCase
 import responses
 
 from matchpredictor.app import create_app
+from test.test_builders import build_app_environment
 
 
 class TestTeamsApi(TestCase):
@@ -26,7 +27,7 @@ class TestTeamsApi(TestCase):
 """
         )
 
-        app = create_app('https://example.com/some.csv', 2023)
+        app = create_app(build_app_environment())
         self.test_client = app.test_client()
 
     def test_list_teams(self) -> None:
