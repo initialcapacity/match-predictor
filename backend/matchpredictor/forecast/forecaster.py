@@ -13,11 +13,18 @@ class Forecast(object):
     confidence: Optional[float]
 
 
+def fixture_is_invalid(fixture: Fixture) -> bool:
+    return fixture.home_team.name == fixture.away_team.name
+
+
 class Forecaster:
     def __init__(self, model_provider: ModelProvider) -> None:
         self.__model_provider = model_provider
 
     def forecast(self, fixture: Fixture, model_name: str) -> Optional[Forecast]:
+        if fixture_is_invalid(fixture):
+            return None
+
         predictor = self.__model_provider.get_predictor(model_name)
         if predictor is None:
             return None
@@ -32,6 +39,9 @@ class Forecaster:
         )
 
     def forecast_in_progress(self, fixture: Fixture, scenario: Scenario, model_name: str) -> Optional[Forecast]:
+        if fixture_is_invalid(fixture):
+            return None
+
         predictor = self.__model_provider.get_in_progress_predictor(model_name)
         if predictor is None:
             return None

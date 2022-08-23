@@ -31,7 +31,7 @@ class TestForecaster(TestCase):
 
     forecaster = Forecaster(ModelProvider([home_model, away_model]))
 
-    def test_forecast_home(self) -> None:
+    def test_forecast__with_home_model(self) -> None:
         forecast = self.forecaster.forecast(
             Fixture(
                 Team(name='Chelsea'),
@@ -52,7 +52,7 @@ class TestForecaster(TestCase):
             confidence=None
         ))
 
-    def test_forecast_away(self) -> None:
+    def test_forecast__with_away_model(self) -> None:
         forecast = self.forecaster.forecast(
             Fixture(
                 Team(name='Chelsea'),
@@ -73,7 +73,19 @@ class TestForecaster(TestCase):
             confidence=None
         ))
 
-    def test_forecast_model_none(self) -> None:
+    def test_forecast__when_home_and_away_team_names_match(self) -> None:
+        forecast = self.forecaster.forecast(
+            Fixture(
+                Team(name='Chelsea'),
+                Team(name='Chelsea'),
+                'UEFA Champions League',
+            ),
+            'Home'
+        )
+
+        self.assertIsNone(forecast)
+
+    def test_forecast__when_model_cannot_be_found(self) -> None:
         forecast = self.forecaster.forecast(
             Fixture(
                 Team(name='Chelsea'),
@@ -85,7 +97,7 @@ class TestForecaster(TestCase):
 
         self.assertIsNone(forecast)
 
-    def test_forecast_in_progress_away(self) -> None:
+    def test_forecast_in_progress__with_away_model(self) -> None:
         forecast = self.forecaster.forecast_in_progress(
             Fixture(
                 Team(name='Chelsea'),
@@ -107,7 +119,7 @@ class TestForecaster(TestCase):
             confidence=None
         ))
 
-    def test_forecast_in_progress_no_model(self) -> None:
+    def test_forecast_in_progress__when_model_not_found(self) -> None:
         forecast = self.forecaster.forecast_in_progress(
             Fixture(
                 Team(name='Chelsea'),
@@ -116,6 +128,19 @@ class TestForecaster(TestCase):
             ),
             Scenario(30, 1, 2),
             'Home'
+        )
+
+        self.assertIsNone(forecast)
+
+    def test_forecast_in_progress__when_home_and_away_team_names_match(self) -> None:
+        forecast = self.forecaster.forecast_in_progress(
+            Fixture(
+                Team(name='Chelsea'),
+                Team(name='Chelsea'),
+                'UEFA Champions League',
+            ),
+            Scenario(30, 1, 2),
+            'Away'
         )
 
         self.assertIsNone(forecast)
