@@ -6,6 +6,8 @@ A few different predictors for football results.
 
 ## Install dependencies and run tests
 
+First install Python 3.10.
+
 ```shell
 make install test
 ```
@@ -18,10 +20,16 @@ make install test
 make backend/test
 ```
 
-### Run an accuracy report
+### Run server
 
 ```shell
 make backend/run
+```
+
+### Run an accuracy report
+
+```shell
+make backend/report
 ```
 
 ## Frontend
