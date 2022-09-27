@@ -1,59 +1,71 @@
 # Match predictor
 
-A few different predictors for football results.
+The Match Predictor codebase contains an app with several predictors for football results.
 
-## Install dependencies and run tests
+## Local development
 
-First install Python 3.10.
+Follow the instructions below to get the app up and running on your machine.
 
-```shell
-make install test
-```
+1.  Install Python 3.10.
+1.  Install dependencies and run tests.
+    ```shell
+    make install test
+    ```
+1.  View the list of available tasks
+    ```shell
+    make
+    ```
 
 ## Backend
 
-### Run tests
+Here are a few tasks that are useful when running the backend app.
+Make sure they all run on your machine.
 
-```shell
-make backend/test
-```
+1.  Run tests
+    ```shell
+    make backend/test
 
-### Run server
+1.  Run model measurement tests
+    ```shell
+    make backend/measure
+    ```
 
-```shell
-make backend/run
-```
+1.  Run server
+    ```shell
+    make backend/run
+    ```
 
-### Run an accuracy report
-
-```shell
-make backend/report
-```
+1.  Run an accuracy report
+    ```shell
+    make backend/report
+    ```
 
 ## Frontend
 
-### Run tests
+Here are a few tasks that are useful when running the frontend app.
+Make sure they all run on your machine.
 
-```shell
-make frontend/test
-```
+1.  Run tests
+    ```shell
+    make frontend/test
+    ```
 
-### Run server
-
-```shell
-make frontend/run
-```
+1.  Run server
+    ```shell
+    make frontend/run
+    ```
 
 ## Integration tests
 
-### Run tests
+If it's helpful, you may want to run integration tests during development.
+Do so with the tasks below.
 
-```shell
-make integration/test
-```
+1.  Run tests
+    ```shell
+    make integration/test
+    ```
 
-### Interactive mode
-
-```shell
-make integration/run
-```
+1.  Interactive mode
+    ```shell
+    make integration/run
+    ```
