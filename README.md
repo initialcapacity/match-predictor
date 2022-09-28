@@ -6,7 +6,7 @@ The Match Predictor codebase contains an app with several predictors for footbal
 
 Follow the instructions below to get the app up and running on your machine.
 
-1.  Install Python 3.10.
+1.  Install Python 3.10 and a recent version of NPM.
 1.  Install dependencies and run tests.
     ```shell
     make install test
