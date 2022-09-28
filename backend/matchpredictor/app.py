@@ -25,7 +25,8 @@ def model_provider(training_data: List[Result]) -> ModelProvider:
         Model("Offense simulator", train_offense_predictor(training_data, 10_000)),
         Model("Full simulator (fast)", train_offense_and_defense_predictor(training_data, 1_000)),
         Model("Full simulator", train_offense_and_defense_predictor(training_data, 10_000)),
-        Model("Linear regression", train_regression_predictor(training_data))
+        # The linear regression model uses scikit learn, so can cause issues on some machines
+        # Model("Linear regression", train_regression_predictor(training_data))
     ])
 
 
