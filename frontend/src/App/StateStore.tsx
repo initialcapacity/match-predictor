@@ -1,4 +1,4 @@
-import {Action, combineReducers, createStore, Reducer, Store} from 'redux';
+import * as Redux from 'redux';
 import {forecastState, ForecastState} from '../Forecast/ForecastState';
 import {ForecastRequestState, forecastRequestState} from '../Teams/ForecastRequestState';
 import {teamsState, TeamsState} from '../Teams/TeamsState';
@@ -11,16 +11,16 @@ export type AppState = {
     models: ModelsState
 };
 
-const appReducer: Reducer<AppState, Action> =
-    combineReducers({
+const appReducer: Redux.Reducer<AppState, Redux.Action> =
+    Redux.combineReducers({
         forecast: forecastState.reducer,
         forecastRequest: forecastRequestState.reducer,
         teams: teamsState.reducer,
         models: modelsState.reducer,
     });
 
-const create = (): Store<AppState> =>
-    createStore(appReducer);
+const create = (): Redux.Store<AppState> =>
+    Redux.createStore(appReducer);
 
 export const stateStore = {
     create,

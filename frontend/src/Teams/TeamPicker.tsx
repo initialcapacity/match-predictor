@@ -10,10 +10,13 @@ type Side = 'home' | 'away'
 
 const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement => {
     const dispatch = useDispatch();
+    const otherSide = props.side === 'home' ? 'away' : 'home';
     const selectedTeam = useSelector((app: AppState) => app.forecastRequest[props.side]);
+    const otherSelectedTeam = useSelector((app: AppState) => app.forecastRequest[otherSide]);
+
     const [league, setLeague] = useState<string>('');
 
-    const teams = useMemo<Team[]>(
+    const teamsForCurrentLeague = useMemo<Team[]>(
         () => props.teamList.teams.filter(t => t.leagues.includes(league)),
         [league]
     );
@@ -25,7 +28,7 @@ const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement =
     }, [selectedTeam]);
 
     const setTeam = (teamName: string) => {
-        const team = teams.filter(t => t.name === teamName).pop();
+        const team = teamsForCurrentLeague.filter(t => t.name === teamName).pop();
 
         if (team) {
             match(props.side)
@@ -50,8 +53,9 @@ const TeamSelector = (props: { teamList: TeamList, side: Side }): ReactElement =
                 label="name"
                 value={selectedTeam?.name}
                 required
-                options={teams.map(t => t.name)}
+                options={teamsForCurrentLeague.map(t => t.name)}
                 onChange={teamName => setTeam(teamName)}
+                isDisabled={teamName => teamName == otherSelectedTeam?.name}
             />
         </fieldset>
     </>;
@@ -61,8 +65,8 @@ const TeamPicker = (props: { side: Side }): ReactElement => {
     const teams = useSelector((app: AppState) => app.teams.data);
 
     return match(teams)
+        .with({type: 'not loaded'}, () => <></>)
         .with({type: 'loading'}, () => <>Loading</>)
-        .with({type: 'not loaded'}, () => <>No teams available</>)
         .with({type: 'loaded'}, ({value}) => <TeamSelector teamList={value} side={props.side}/>)
         .with({type: 'refreshing'}, ({value}) => <TeamSelector teamList={value} side={props.side}/>)
         .with({type: 'failure'}, data => <>{data.error}</>)

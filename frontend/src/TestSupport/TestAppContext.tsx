@@ -15,8 +15,8 @@ export const TestAppContext = (props: TestAppContextProps): ReactElement => {
         enableUpcomingGames: true
     };
 
-    return <Provider store={props.store || stateStore.create()}>
-        <AppConfigContext.Provider value={props.appConfig || defaultAppConfig}>
+    return <Provider store={props.store ?? stateStore.create()}>
+        <AppConfigContext.Provider value={props.appConfig ?? defaultAppConfig}>
             {props.children}
         </AppConfigContext.Provider>
     </Provider>;
