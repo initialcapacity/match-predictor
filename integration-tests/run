@@ -33,6 +33,7 @@ FRONTEND_PROCESS=$!
 info "starting fake csv provider"
 kill $(lsof -t -i:5020) > /dev/null 2>&1
 pushd ../backend > /dev/null 2>&1
+  source env/bin/activate
   PORT=5020 python -m fakecsvprovider > $LOGFILE 2>&1 &
 popd > /dev/null 2>&1
 FAKE_CSV_PROCESS=$!
@@ -43,6 +44,8 @@ info "fake csv provider started"
 info "starting backend"
 kill $(lsof -t -i:5010) > /dev/null 2>&1
 pushd ../backend > /dev/null 2>&1
+  source env/bin/activate
+  source .env
   PORT=5010 CSV_LOCATION='http://localhost:5020/fixture.csv' python -m matchpredictor > $LOGFILE 2>&1 &
 popd > /dev/null 2>&1
 BACKEND_PROCESS=$!
