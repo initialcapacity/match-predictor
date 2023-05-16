@@ -8,15 +8,10 @@ from matchpredictor.upcominggames.football_data_api_client import FootballDataAp
 
 
 @dataclass(frozen=True)
-class Team:
-    name: str
-    leagues: List[str]
-
-
-@dataclass(frozen=True)
 class UpcomingGame:
-    home: Team
-    away: Team
+    league: str
+    home: str
+    away: str
 
 
 @dataclass(frozen=True)
@@ -24,11 +19,32 @@ class UpcomingGamesResponse:
     games: List[UpcomingGame]
 
 
+@dataclass(frozen=True)
+class LeagueMappingKey:
+    areaName: str
+    competitionName: str
+
+    def default_value(self) -> str:
+        return f"{self.areaName} {self.competitionName}"
+
+
+league_mapping = {
+    LeagueMappingKey(areaName="Netherlands", competitionName="Eredivisie"): "Dutch Eredivisie",
+    LeagueMappingKey(areaName="England", competitionName="Championship"): "English League Championship",
+}
+
+
 def response_from_football_data_matches(matches_response: FootballDataMatchesResponse) -> UpcomingGamesResponse:
     def build_upcoming_game(match_json: MatchJson) -> UpcomingGame:
+        league_mapping_key = LeagueMappingKey(
+            areaName=match_json.area.name,
+            competitionName=match_json.competition.name
+        )
+
         return UpcomingGame(
-            home=Team(name=match_json.homeTeam.name, leagues=[match_json.competition.name]),
-            away=Team(name=match_json.awayTeam.name, leagues=[match_json.competition.name]),
+            league=league_mapping.get(league_mapping_key, league_mapping_key.default_value()),
+            home=match_json.homeTeam.shortName,
+            away=match_json.awayTeam.shortName,
         )
 
     games = [
@@ -41,7 +57,7 @@ def response_from_football_data_matches(matches_response: FootballDataMatchesRes
 def upcoming_games_api(api_client: FootballDataApiClient) -> Blueprint:
     api = Blueprint("upcoming_games_api", __name__)
 
-    @api.route('/upcoming-games', methods=["GET"])
+    @api.get('/upcoming-games')
     def list_upcoming_games() -> Response:
         maybe_football_data_api_matches = api_client.fetch_matches()
 

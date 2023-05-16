@@ -7,10 +7,12 @@ import {Http} from '../Http/Http';
 const UpcomingGameRow = ({game}: { game: UpcomingGamesApi.UpcomingGame }): ReactElement =>
     <li>
         <dl>
+            <dt>League</dt>
+            <dd>{game.league}</dd>
             <dt>Home</dt>
-            <dd>{game.home.name}</dd>
+            <dd>{game.home}</dd>
             <dt>Away</dt>
-            <dd>{game.away.name}</dd>
+            <dd>{game.away}</dd>
         </dl>
     </li>;
 

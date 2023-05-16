@@ -9,14 +9,9 @@ jest.mock('../UpcomingGamesApi');
 
 describe('UpcomingGameList', () => {
 
-    const chelsea = {name: 'Chelsea', leagues: ['england']};
-    const burnley = {name: 'Burnley', leagues: ['england']};
-    const sheffield = {name: 'Sheffield', leagues: ['england']};
-    const liverpool = {name: 'Liverpool', leagues: ['england']};
-
     const games: UpcomingGamesApi.UpcomingGame[] = [
-        {home: chelsea, away: burnley},
-        {home: burnley, away: chelsea},
+        {league: 'Premier League', home: 'Chelsea', away: 'Burnley'},
+        {league: 'Premier League', home: 'Burnley', away: 'Chelsea'},
     ];
 
     test('loading the list from the backend', async () => {
@@ -27,6 +22,9 @@ describe('UpcomingGameList', () => {
         mocked(upcomingGamesApi).fetch.mockImplementation(async () => successResult);
 
         render(<UpcomingGameList/>);
+
+        const englandOccurrences = await screen.findAllByText('Premier League');
+        expect(englandOccurrences).toHaveLength(2);
 
         const chelseaOccurrences = await screen.findAllByText('Chelsea');
         expect(chelseaOccurrences).toHaveLength(2);
@@ -56,7 +54,7 @@ describe('UpcomingGameList', () => {
         expect(burnleyOccurrences).toHaveLength(2);
 
         const refreshedGames: UpcomingGamesApi.UpcomingGame[] = [
-            {home: sheffield, away: liverpool}
+            {league: 'Premier League', home: 'Sheffield', away: 'Liverpool'}
         ];
 
         mocked(upcomingGamesApi).fetch.mockImplementation(async () => result.ok(refreshedGames));

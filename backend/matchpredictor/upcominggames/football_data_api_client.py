@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, List, cast
+from typing import Optional
 
 import dacite
 import requests
@@ -11,15 +11,21 @@ class NamedJson:
 
 
 @dataclass(frozen=True)
+class TeamJson:
+    shortName: str
+
+
+@dataclass(frozen=True)
 class MatchJson:
+    area: NamedJson
     competition: NamedJson
-    homeTeam: NamedJson
-    awayTeam: NamedJson
+    homeTeam: TeamJson
+    awayTeam: TeamJson
 
 
 @dataclass(frozen=True)
 class FootballDataMatchesResponse:
-    matches: List[MatchJson]
+    matches: list[MatchJson]
 
 
 class FootballDataApiClient:

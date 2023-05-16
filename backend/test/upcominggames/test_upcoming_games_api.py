@@ -31,23 +31,44 @@ class TestUpcomingGamesApi(TestCase):
             "matches": [
                 {
                     "area": {
-                        "name": "Chile",
-                        "code": "CHL"
+                        "name": "Netherlands",
+                        "code": "NLD"
                     },
                     "competition": {
-                        "name": "Primera División",
-                        "code": "CPD",
+                        "name": "Eredivisie",
+                        "code": "DED",
                         "type": "LEAGUE"
                     },
                     "homeTeam": {
-                        "name": "CDP Curicó Unido",
-                        "shortName": "Curicó",
-                        "tla": "CUR"
+                        "name": "FC Groningen",
+                        "shortName": "Groningen",
+                        "tla": "GRO"
                     },
                     "awayTeam": {
-                        "name": "Audax CS Italiano",
-                        "shortName": "Audax Italiano",
-                        "tla": "AUD"
+                        "name": "AFC Ajax",
+                        "shortName": "Ajax",
+                        "tla": "AJA"
+                    }
+                },
+                {
+                    "area": {
+                        "name": "England",
+                        "code": "ENG"
+                    },
+                    "competition": {
+                        "name": "Championship",
+                        "code": "ELC",
+                        "type": "LEAGUE"
+                    },
+                    "homeTeam": {
+                        "name": "Luton Town FC",
+                        "shortName": "Luton Town",
+                        "tla": "LUT"
+                    },
+                    "awayTeam": {
+                        "name": "Sunderland AFC",
+                        "shortName": "Sunderland",
+                        "tla": "SUN"
                     }
                 }
             ]
@@ -66,8 +87,14 @@ class TestUpcomingGamesApi(TestCase):
         expected_body = {
             "games": [
                 {
-                    "home": {"name": "CDP Curicó Unido", "leagues": ["Primera División"]},
-                    "away": {"name": "Audax CS Italiano", "leagues": ["Primera División"]}
+                    "league": "Dutch Eredivisie",
+                    "home": "Groningen",
+                    "away": "Ajax",
+                },
+                {
+                    "league": "English League Championship",
+                    "home": "Luton Town",
+                    "away": "Sunderland",
                 },
             ]
         }
@@ -79,6 +106,57 @@ class TestUpcomingGamesApi(TestCase):
 
         recorded_request = responses.calls[0].request
         self.assertEqual('my-api-key', recorded_request.headers['X-Auth-Token'])
+
+    @responses.activate
+    def test_list__with_no_mapping_for_the_league(self) -> None:
+        sample_football_data_response = """{
+                    "matches": [
+                        {
+                            "area": {
+                                "name": "MiddleEarth",
+                                "code": "MID"
+                            },
+                            "competition": {
+                                "name": "BattleForTheRing",
+                                "code": "BFR",
+                                "type": "LEAGUE"
+                            },
+                            "homeTeam": {
+                                "name": "Gondor",
+                                "shortName": "Gondor",
+                                "tla": "GON"
+                            },
+                            "awayTeam": {
+                                "name": "The Shire FC",
+                                "shortName": "The Shire",
+                                "tla": "TSH"
+                            }
+                        }
+                    ]
+                }
+                """
+
+        responses.add(
+            method='GET',
+            url='https://api.football-data.org/v4/matches',
+            status=200,
+            body=sample_football_data_response
+        )
+
+        response = self.test_client.get('/upcoming-games')
+
+        expected_body = {
+            "games": [
+                {
+                    "league": "MiddleEarth BattleForTheRing",
+                    "home": "Gondor",
+                    "away": "The Shire",
+                }
+            ]
+        }
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(expected_body, response.get_json())
 
     @responses.activate
     def test_list__with_unexpected_json_from_football_data(self) -> None:
