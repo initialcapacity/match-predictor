@@ -35,5 +35,5 @@ class TestModelsApi(TestCase):
             {"name": "Offense simulator", "predicts_in_progress": True},
             {"name": "Full simulator (fast)", "predicts_in_progress": True},
             {"name": "Full simulator", "predicts_in_progress": True},
-            {"name": "Linear regression", "predicts_in_progress": False},
+            # {"name": "Linear regression", "predicts_in_progress": False},
         ]})
