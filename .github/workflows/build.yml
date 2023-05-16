@@ -68,7 +68,7 @@ jobs:
 
       - name: Run tests
         run: |
-          cp backend/.env.example backend.env
+          cp backend/.env.example backend/.env
           make integration/test
 
       - name: Archive artifacts
