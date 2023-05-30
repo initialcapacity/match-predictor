@@ -16,7 +16,7 @@ const upcomingGameDecoder: schemawax.Decoder<UpcomingGamesApi.UpcomingGame> =
             league: schemawax.string,
             home: schemawax.string,
             away: schemawax.string,
-        }
+        },
     });
 
 const upcomingGameListDecoder: schemawax.Decoder<UpcomingGamesApi.UpcomingGame[]> =
@@ -28,8 +28,8 @@ const upcomingGameListDecoder: schemawax.Decoder<UpcomingGamesApi.UpcomingGame[]
         })
         .andThen(json => json.games);
 
-const fetch = async (): Promise<Result<UpcomingGamesApi.UpcomingGame[], Http.Error>> =>
-    http.sendRequest('/api/upcoming-games', upcomingGameListDecoder);
+const fetch = async (dateFrom: string): Promise<Result<UpcomingGamesApi.UpcomingGame[], Http.Error>> =>
+    http.sendRequest(`/api/upcoming-games/${dateFrom}`, upcomingGameListDecoder);
 
 export const upcomingGamesApi = {
     fetch,

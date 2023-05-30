@@ -13,7 +13,7 @@ describe('UpcomingGamesApi', function () {
     test('fetch', async () => {
 
         server.use(
-            rest.get('/api/upcoming-games', (req, res, ctx) => {
+            rest.get('/api/upcoming-games/2023-05-30', (req, res, ctx) => {
                 return res(ctx.json({
                     games: [
                         {
@@ -26,7 +26,7 @@ describe('UpcomingGamesApi', function () {
             })
         );
 
-        const games = await upcomingGamesApi.fetch();
+        const games = await upcomingGamesApi.fetch('2023-05-30');
 
         expect(games).toEqual(result.ok([
             {

@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from datetime import date
+import datetime
 from typing import Optional
 
 import dacite
@@ -33,10 +35,14 @@ class FootballDataApiClient:
     def __init__(self, api_key: str):
         self.api_key = api_key
 
-    def fetch_matches(self) -> Optional[FootballDataMatchesResponse]:
+    nine_days = datetime.timedelta(days=9)
+
+    def fetch_matches(self, date_from: date) -> Optional[FootballDataMatchesResponse]:
+        date_to = date_from + self.nine_days
+
         try:
             football_data_api_response = requests \
-                .get('https://api.football-data.org/v4/matches', headers={'X-Auth-Token': self.api_key}) \
+                .get(f'https://api.football-data.org/v4/matches?dateFrom={date_from}&dateTo={date_to}', headers={'X-Auth-Token': self.api_key}) \
                 .json()
 
             return dacite.core.from_dict(

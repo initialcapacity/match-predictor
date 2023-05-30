@@ -23,6 +23,7 @@ class TestUpcomingGamesApi(TestCase):
 
         app_environment = build_app_environment(football_data_api_key='my-api-key')
         app = create_app(app_environment)
+        app.config['TESTING'] = True
         self.test_client = app.test_client()
 
     @responses.activate
@@ -77,12 +78,12 @@ class TestUpcomingGamesApi(TestCase):
 
         responses.add(
             method='GET',
-            url='https://api.football-data.org/v4/matches',
+            url='https://api.football-data.org/v4/matches?dateFrom=2023-06-01&dateTo=2023-06-10',
             status=200,
             body=sample_football_data_response
         )
 
-        response = self.test_client.get('/upcoming-games')
+        response = self.test_client.get('/upcoming-games/2023-06-01')
 
         expected_body = {
             "games": [
@@ -138,12 +139,12 @@ class TestUpcomingGamesApi(TestCase):
 
         responses.add(
             method='GET',
-            url='https://api.football-data.org/v4/matches',
+            url='https://api.football-data.org/v4/matches?dateFrom=2023-06-01&dateTo=2023-06-10',
             status=200,
             body=sample_football_data_response
         )
 
-        response = self.test_client.get('/upcoming-games')
+        response = self.test_client.get('/upcoming-games/2023-06-01')
 
         expected_body = {
             "games": [
@@ -158,17 +159,21 @@ class TestUpcomingGamesApi(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(expected_body, response.get_json())
 
+    def test_list__when_date_is_invalid(self) -> None:
+        response = self.test_client.get('/upcoming-games/this-is-not-a-date')
+        self.assertEqual(400, response.status_code)
+
     @responses.activate
     def test_list__with_unexpected_json_from_football_data(self) -> None:
 
         responses.add(
             method='GET',
-            url='https://api.football-data.org/v4/matches',
+            url='https://api.football-data.org/v4/matches?dateFrom=2023-06-01&dateTo=2023-06-10',
             status=200,
             body="{\"hello\":\"world\"}"
         )
 
-        response = self.test_client.get('/upcoming-games')
+        response = self.test_client.get('/upcoming-games/2023-06-01')
 
         self.assertEqual(503, response.status_code)
 
@@ -177,11 +182,11 @@ class TestUpcomingGamesApi(TestCase):
 
         responses.add(
             method='GET',
-            url='https://api.football-data.org/v4/matches',
+            url='https://api.football-data.org/v4/matches?dateFrom=2023-06-01&dateTo=2023-06-10',
             status=200,
             body="this is not json"
         )
 
-        response = self.test_client.get('/upcoming-games')
+        response = self.test_client.get('/upcoming-games/2023-06-01')
 
         self.assertEqual(503, response.status_code)

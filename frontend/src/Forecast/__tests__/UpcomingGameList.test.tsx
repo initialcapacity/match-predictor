@@ -21,7 +21,11 @@ describe('UpcomingGameList', () => {
 
         mocked(upcomingGamesApi).fetch.mockImplementation(async () => successResult);
 
-        render(<UpcomingGameList/>);
+        const currentDate = new Date('2022-12-31');
+
+        render(<UpcomingGameList currentDate={currentDate}/>);
+
+        expect(upcomingGamesApi.fetch).toHaveBeenCalledWith('2022-12-31');
 
         const englandOccurrences = await screen.findAllByText('Premier League');
         expect(englandOccurrences).toHaveLength(2);

@@ -32,7 +32,10 @@ const GameList = ({games, doRefresh}: GameListProps): ReactElement =>
         </ul>
     </>;
 
-export const UpcomingGameList = (): ReactElement => {
+export const UpcomingGameList = (props: { currentDate?: Date }): ReactElement => {
+
+    const currentDate = props.currentDate ?? new Date();
+    const dateFrom = currentDate.toISOString().slice(0, 10);
 
     const [gamesState, setGamesState] = useState<GamesState>(remoteData.notLoaded());
 
@@ -40,7 +43,7 @@ export const UpcomingGameList = (): ReactElement => {
         setGamesState(remoteData.startLoading(gamesState.value));
 
         upcomingGamesApi
-            .fetch()
+            .fetch(dateFrom)
             .then(result => setGamesState(remoteData.ofResult(result)));
     };
 
