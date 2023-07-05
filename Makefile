@@ -42,6 +42,7 @@ backend/report:
 backend/run:
 	cd backend; \
 	source env/bin/activate; \
+	source .env; \
 	python -m matchpredictor; \
 
 .PHONY: frontend/lint
